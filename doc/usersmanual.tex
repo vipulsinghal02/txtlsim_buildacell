@@ -1,0 +1,39 @@
+% Master File: usersmanual.tex
+% Document Type: PDFLaTeX
+\documentclass[english]{report}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{4}
+\usepackage{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{color} 
+\usepackage{comment}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{verbatim}
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+
+\begin{document}
+\title{\textsc{TXTL matlab toolbox - User's manual}}
+\date{\textsc{version 1.1}}
+\author{\textsc{Zoltan A. Tuza, Vipul Singhal, Richard M. Murray}}
+\maketitle
+\textsc{\tableofcontents}
+
+\input{intro}
+\input{installation}
+\input{examples}
+
+% \chapter{\textsc{Creating new circuits}}
+	%\section{Creating Circuit Based on Library Components}
+	
+% \section{Creating a Library Component}
+% 	\section{Creating a Parameter File}
+
+\input{core_functionalities}
+\input{appendix}

@@ -1,0 +1,380 @@
+2014-09-29 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* docs/: reorganization of the docs files, each chapter one file
+	* examples/import_plate_reader_data.m: new example how to import plate reader data
+	* auxiliary/parseGetEqOutput.m: transforming events from the Simbiology Object to the ODE RHS file 
+2013-10-10 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* auxiliary/stdshade.m: major refactoring in stdshade, now handles
+	matrices of data. no backward compatibility!  
+2013-09-30 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* auxiliary/mergeWholeExpFile.m: the MG signal curvefit is calculated after averaging the data. The background well from each experiment files is added to the return structure.  
+	* auxiliary/wholeExpfileReader.m: MG background curvefit is based on smoothingspline instead of gauss2. 
+	* auxiliary/processMGData.m: added option for choose fitting type, default is smoothingspline.  
+2013-09-30 DSG <dsg@DansMachine>
+	* auxiliary/replaceMissingData.m: function to move data from one experiment file to another
+2013-09-19 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* auxiliary/parseGetEqOutput.m: test added for getequations method, which is required for this function.
+	* auxiliary/getStdMean.m: refactor to make it compatible with expFileMerger.  
+2013-09-07 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* auxiliary/mergeWholeExpFile.m: this function merges biotek plate reader data into one object (by calculating mean std for each data field, e.g. rates,endtime,rawdata)
+2013-09-04 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* modules/paramest/parameter_estimation_patternsearch.m: added, initial parameter value perturbation. Number of initial paramter vectors can be generated with Latin hypercube sampling. 
+2013-08-30 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* auxiliary/parseGetEqOutput.m: bugfix, simbiology's getequation output can have more initial values than state variables, that leads to error in ode15s() function. A simple check looks for initial values with state equations.
+	* core/txtl_plot.m: built in check to recognize simdata object when the function is called with 3 arguments txtl_plot(t,x,Mobj) vs txtl_(simData,Mobj,dataGroups).
+2013-08-28 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* doc/Makefile: makefile for the usersmanual, thanks to SCL
+2013-08-26 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* examples/incoherent_ff_loop_function.m: function for of the IFFL for rapid testing exp conditions. + example file
+2013-08-25 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* tests/test_basic_examples.m: test file to test basic functionality through example files
+	* core/findspecies.m: finding species within complexes 3rd argument: withinComplex, used for calculate total concentration of species.
+	* auxiliary/findStringInAList.m: substring search to find all instances of the searched string within strings
+	* core/txtl_getDefaultPlotDataStruct.m: creates a default data struct for txtl_plot
+	* core/txtl_plot.m: refactoring to accommodate the new plot data struct
+	* core/txtl_setup_new_protein_added.m: in Matlab 2013a the implementation of union has changed, list comparison is modified accordingly
+	* auxiliary/wholeExpfileReader.m: complex experiment file reader, reads biotek platereader generated excel files (in csv format), then loads up related matrices and adjust the background signal in each valve.
+	* auxiliary/calcAdditionalData.m: calculates experiment related files, e.g. expression rates, endtimes.
+	* auxiliary/processMGData.m: calculates mRNA signal fits for each valves.
+	* examples/genetic_toggle_switch_function.m: function form of the toggle switch for rapid testing experimental conditions.
+	* examples/genetic_toggle_switch_gradient.m: example file for toggle switch experiment conditions.  
+2013-08-16 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* core/txtl_extract: linear dna degradation related species has been moved to txtl_add_dna (under linear dna degradation).
+2013-08-15 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* auxiliary/parseGetEqOutput.m: new parser function, it parses a simbiology objects into an ode functions compatible file. 
+	* tmp/: new directory to store script generated files
+	* modules/: new directory for external modules
+	* data/: new directory to store data for wetlab experiments 
+2013-08-05 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* core/txtl_runsim.m: version detection to switch off AbsoluteToleranceScaling in >=Matlab 8.0v (without that the ODE solver fails with the current model) 
+
+2013-07-30 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* core/findspecies.m: complete code refactoring, multi compartment compatibility
+	* core/txtl_addspecies.m: major code refactoring, multi compartment species adding.
+	* examples/geneexpr_vesicule.m: first cut for vesicule based simulations.
+	* core/txtl_enzyme_resource_degradation.m: enzyme and resource related degradations are moved here for txtl_runsim.
+	* auxiliary/: new aux functions, see svn commit for further information.
+2013-07-17 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* config/: new folder for extract config files
+2013-07-15 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* core/txtl_setup_default_basepair_length.m: buxfig in indexing
+2013-07-11 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* components/txtl_protein_lacI.m: inducer degradation has been removed
+	* core/txtl_setup_new_protein_added.m: cross check function, this function maintains integrity of reactions if a protein manually added to the TXTL reaction. 
+2013-07-09 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* core/txtl_mrna_degradation.m: separate file for mRNA degradations reactions, mainly to keep the code maintainable
+	* core/txtl_plot_gui.m: bugfix
+2013-06-24 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* aux/: this folder is renamed to auxiliary due to compatibility issues with Windows
+2013-06-17 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* examples/*: configobj migrated to run_sim, simulation time has to be given, option for configobj.
+	* core/txtl_plot.m: default dataGroups cellarray for easier plotting
+	* aux/expression_endtime.m: new aux function for calculating expression and time and rate (expression_rate.m)
+
+2013-05-20  Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* core/txtl_runsim.m: RNAP degradation has been added, no NTP degradation in the model. Distinguished ATP specie added used only in TL. 
+	* components/*: deCFP protein/param files added, component parameters have been changed.
+	* examples/*: genetic_switch: bugfix, code clean up.
+	* aux/*: new directory for auxiliary functions.
+2013-02-21  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* component/txtl_protein_tetR.m: aTc degradation is no longer used (no
+	aTc degradation has been observed so far)
+	* core/txtl_run.m: ATP regeneration model has been added
+
+2013-02-13  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* components/txtl_prom_ptet.m: modeling error is corrected
+	* components/txtl_protein_tetR.m: 2aTc:tetR is formed instead of
+	aTc:tetR c.f. Vassilios et al. 2007.
+	* components/txtl_prom_p70pr1.m: new p70 promoter, 20% strength of p70
+	* components/txtl_param_*.m: parameter numbers are adjusted, to match
+	experimental data
+	* core/txtl_buffer.m and core/txtl_extract.m:  parameters
+	are moved to the extract config (EX.csv), actual numbers are multiplied since we
+	working with final concentrations in the parameter files before the
+	final MasterMix is assembled
+	* core/txtl_combine.m: the buffer, extract and dna ratio is wired in as a
+	default value. 
+	* core/txtl_plot.m: keyword handling, e.g. ALL_DNA to show all DNA and
+	RNA in the system. 
+	* core/txtl_add_dna.m: atp regeneration stops after 3 hours and NTP
+	become unusable -> reaction for this process is added.   
+
+
+
+2013-02-04  Zoltan Tuza <zoltuz@zoltuz-laptop>
+	
+	* core/txtl_setup_parameters.m: deprecated, new parameter handling is
+	managed through component and reaction config objects
+	* core/txtl_runsim_*.m: removing setup_parameters calling
+	* core/txtl_component_config.m: enabling multiple protein complexes to
+	sequester the same DNA. 
+	* component/txtl_param_*.m: adjusting the file format to the
+	format in component config class.
+	* examples/toxin_antitoxin.m: model of the toxin-antitoxin system
+
+
+2013-01-27  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* core/txtl_plot.m: calculation of total RNA concentration, showing
+	on the corresponding plot.
+	* core/txtl_buffer.m: NTP and AA concentrations are adjusted
+	* core/txtl_adddna.m: reactions for bounded mRNA degradation was added
+	* core/txtl_extract: numbers are adjusted
+
+2013-01-23  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* core/txtl_adddna.m: minor refactoring
+	* core/txtl_combine.m: minor refactoring
+	* doc/usersmanual.tex: latex template for the user's manual
+
+2013-01-14  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* core/txtl_reaction_config.m: all extract related parameters are
+	added to this object all extract related parameters are added to this
+	object.
+	* core/txtl_component_config.m: object for component (promoter,protein) related
+	parameters.
+	* components/{txtl_prom_*,txtl_protein}: parameters are pulled from
+	the corresponding parameter file through the parameter-set handling object 
+2013-01-06  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* txtl_plot: making adjustment to the GUI
+	* txtl_plot_gui: first version of the GUI: visibility of the species
+	on the species plot can be turned on/off
+
+2013-01-04  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* txtl_reaction_config: matlab class for configuration handling. The
+	current object is stored in the circuit-tube's UserData field.
+	* txtl_runsim: minor modification to handle the config object
+
+2012-12-29  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* txtl_adddna.m: major code refactoring
+	* txtl_protein_*.m: input/output data format has changed (geneData: cellarray
+	names + lengths)
+	* txtl_prom_*.m: input/output data format has changed (promData: cellarray
+	names + lengths)
+
+2012-12-08  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* txtl_setup_default_basepair_lengths.m: multipurpose default length basepair set up
+	for promoters,utr_rbs,genes
+	* txtl_prom_*: the default length handler and add txtl_addspecies are in place
+	* txtl_protein_*: the default length handler and add txtl_addspecies are in place
+	* txtl_addspecies.m: multi species array handling capability
+	* txtl_continue_simulation: deleted, since the functionality is moved
+	to txtl_runsim
+
+2012-11-23  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* txtl_transcription.m: sigma factor independent transcription (merging the old 
+	rnap files). The corresponding promoters are adjusted. 
+	Old rnap70 and rnap28 files are deleted from this revision. 
+
+2012-11-19  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* txtl_runsim.m: parameter set up moved here
+	* sample circuits: minor adjustment to the new i/o argument order in
+	txtl_runsim.
+
+2012-10-25  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* txtl_rnap_rnap28.m: added an option for modified NTP utilization 
+	model to avoid high reaction order
+	* txtl_rnap_rnap70.m: added an option modified NTP utilization 
+	model to avoid high reaction order
+	* txtl_adddna.m: added an optional model for AA utilization
+	* txtl_setup_parameters.m: new parameters for the reactions in the 
+	new NTP and AA utilization model
+
+2012-10-22  Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* txtl_prom_p28.m: modification in the reaction modeling
+	* txtl_prom_p28_ptet.m: modification in the reaction modeling
+	* txtl_protein_tetR.m: tetramerization is taken out
+	* txtl_protein_sigma28.m: reverse reaction is adjusted to RNAP70's reaction rate 
+	* incoherent_ff_loop.m: implementation of incoherent ff_loop based on Zach's circuit
+	* txtl_rnap_rnap28.m: added: TX file for RNAP28 complex
+
+2012-10-18  Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* txtl_combine.m: carrying the name of the tubes using it as 
+	a window name in txtl_plot.
+	* txtl_plot.m: bugfix, handle non existing species in total 
+	concentration. Window name is given by the tubename
+	* concurentSigmaFactors.m: simulating two circuits at once.
+	* txtl_rnap_ranp70.m: modification for combinatorial promoter
+	* txtl_prom_p28.m: added sigma28 promoter
+	* txtl_prom_p28_ptet.m: added combinatorial promoter
+	* combinatorial_promoter.m: added example file for combinatorial
+	promoter.
+2012-10-15  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* via SF shell access: svn post-commit script has been added 
+
+2012-10-07  Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* txtl_combine: bugfix, to carry UserData during mixing
+	* txtl_plot: improved calculation of total concentration
+	* txtl_setupparameters: new config file to handle core parameters
+	at one place. (many other files have been adjusted becouse of that)
+
+2012-10-07  Richard Murray  <murray@altura.local>
+
+	* txtl_dna.m: removed this file, since its functionality is replaced
+	by txtl_adddna()
+
+	* txtl_protection.m, protection.m: moved txtl_protection.m to
+	protection.m.  As a general rule, only functions that are part of
+	the toolbox (rather than examples) should start with txtl_
+
+	* negautoreg.m: changed DNA separator from = to --
+
+	* txtl_prom_placI.m: corrected error in the way that reactions were
+	specified
+
+	* geneexpr.m: changed DNA separator from = to --
+
+	* concurrentSigmaFactors.m: use txtl_adddna() instead of txtl_dna()
+
+	* txtl_plot.m: changed DNA separator from = to --
+
+2012-10-04 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* txtl_runsim.m: added SimBiology Simulation Data object handling 
+	capability through varargin.
+	* txtl_plot.m:  calculating and plotting the total concentration of
+	selected proteins.
+
+2012-10-02 Zoltan Tuza <zoltuz@zoltuz-laptop>
+	* txtl_runsim.m: first version of txtl_runsim, it handles all the simulation 
+	related settings and also can continue a simulation from the end of a previous simulation.
+	(data and time vectors are merged together automatically)
+
+2012-10-01 Zoltan Tuza <zoltuz@zoltuz-laptop>
+
+	* txtl_plot.m: added regular expression handling capability for 
+	Gene Expression and DNA and mRNA plots
+
+2012-09-29  Richard Murray  <murray@altura.local>
+
+	* negautoreg.m: got rid of junk DNA in this example; updated
+	plotting to handle new RNAP70 format (starts at zero => normalize by
+	max, not initial)
+
+	* txtl_extract.m: tweaked the RNAP + Sigma70 reaction to prevent
+	generation of very stiff differential equations
+
+	* txtl_protein_deGFP.m: commented out degradation reactions.  These
+	don't occur in TXTL unless ClpXP is present 
+
+	* *.m: added TODOs
+
+	* txtl_dna.m: added missing semicolon that was causing prepromspec
+	to generate extraneous output.
+
+	* negautoreg.m (configsetObj): ode23s is not supported in MATLAB
+	2012a.  Commented out solver type; this example shoudl work with
+	default solver.
+
+	* *.m: Merged changes from Vipul and Zoltan's development branch
+
+2012-09-12  Richard Murray  <murray@altura.local>
+
+	* Pending: added some possible project ideas to Pending list.
+
+2012-09-11  Richard Murray  <murray@altura.local>
+
+	* induction.m: new function to demonstrate txtl_addspecies.
+
+	* txtl_addspecies.m: new function to add a species to a tube.
+
+2012-09-11  Richard Murray  <murray@altura.local>
+
+	* txtl_dna.m: updated documentation.  Also summary information on
+	Openwetware web site
+
+	* txtl_dna.m: changed txtl_rbs_* to txtl_utr_
+
+	* txtl_rbs_rbs.m: renamed to txtl_utr_rbs.m
+
+	* negautoreg.m (mMperunit): added plots of RNAP and ribosome
+	concentrations and normalized resource plot
+
+2012-09-10  Richard Murray  <murray@altura.local>
+
+	* txtl_buffer.m: Set concentration of NTP in buffer to match
+	what we use in experiments.
+
+	* negautoreg.m (mMperunit): updated plots to show resources in mM
+
+2012-09-09  Richard Murray  <murray@altura.local>
+
+	* txtl_rnap_rnap70.m: added in enzymatric reaction for transcription
+	to rate limit the effect of NTP usage.  Parameters need to be updated.
+
+	* txtl_prom_p70.m, rxtl_prom_ptet.m, txtl_rnap_rnap70.m: moved
+	generic RNAP70 reactions to rxtl_rnap_rnap70.m since they work for
+	any promoter using RNAP70.
+
+	* txtl_dna.m: added in enzymatic reaction for translation to rate
+	limit the effect of amino acid usage.  Parameters need to be updated.
+
+	* txtl_rbs_rbs.m, txtl_dna.m: moved translation reaction setup to
+	txtl_dna.m
+
+2012-09-09  Richard Murray  <murray@altura.local>
+
+	* ./: set svn:mime-type to text/plain for all files
+
+	* txtl_protein_deGFP.m: added new protein setup file to include GFP
+	maturation.  Mature deGFP is [protein deGFP*].
+
+	* txtl_rbs_rbs.m: updated reaction rates to try to get them to be
+	more realistic
+
+	* txtl_extract.m: added dilution factor in calculating RNAP and
+	ribosome concentrations; updated concentrations.
+
+	* txtl_prom_ptet.m, txtl_prom_p70.m: updated binding and
+	transcription rates
+
+	* txtl_rbs_rbs.m, txtl_dna.m: moved mRNA degradation from RBS setup
+	file to DNA setup file
+
+	* negautoreg.m: updated plotting format; added in GFP for comparison
+
+2012-09-09  Richard Murray  <murray@altura.local>
+
+	* geneexpr.m (indexlist): new example, intended to eventually match
+	protsynt81bis.m
+
+	* txtl_dna.m (protein): added call to protein specific file, if it
+	exists
+
+	* txtl_protein_tetR.m: new file to describe aTc, TetR intearctions
+
+	* negautoreg.m, txtl_prom_ptet.m: moved DNA binding reactions for
+	tetR to promoter file from example reactions
+
+	* txtl_*.m: updated copyright info to include the actual copyright,
+	placed in Caltech's name.
+
+2012-09-08  Richard Murray  <murray@altura.local>
+
+	* txtl_prom_ptet.m: added ptet promoter file; still needs correct
+	parameters.
+
+2012-09-08  Richard Murray  <murray@altura.local>
+
+	* txtl_*.m: new structure for TX-TL models using Simbiology
+
+2012-09-05  Richard Murray  <murray@altura.local>
+
+	* gamS_plot.m: initial commit of Clare Chan's model.  Changed the
+	name of the file to be more descriptive.  Added a comment at the top
+	of the file to desribe what it contains.
+
+	* protsynt81bis.m: initial commit of Clare Chen's model.  Added
+	copyright info (BSD) to top of file.  Made a few minor formatting
+	changes. 
+

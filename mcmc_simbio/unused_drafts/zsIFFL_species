@@ -1,0 +1,113 @@
+
+
+% misc. species
+'RNAP'
+'Ribo'
+'RecBCD'
+'RNase'
+'AGTP'
+'CUTP'
+'AA'
+'AGMP'
+'CUMP'
+'OC12HSL'
+'aTc'
+
+
+
+'DNA plac--utr1--lasR'
+'RNAP:DNA plac--utr1--lasR'
+'AGTP:RNAP:DNA plac--utr1--lasR'
+'CUTP:RNAP:DNA plac--utr1--lasR'
+'CUTP:AGTP:RNAP:DNA plac--utr1--lasR'
+'term_RNAP:DNA plac--utr1--lasR'
+
+
+'RNA utr1--lasR'
+'Ribo:RNA utr1--lasR'
+'AA:Ribo:RNA utr1--lasR'
+'AA:AGTP:Ribo:RNA utr1--lasR'
+'term_Ribo:RNA utr1--lasR'
+
+
+'RNA utr1--lasR:RNase'
+'Ribo:RNA utr1--lasR:RNase'
+'AA:AGTP:Ribo:RNA utr1--lasR:RNase'
+'term_Ribo:RNA utr1--lasR:RNase'
+'AA:Ribo:RNA utr1--lasR:RNase'
+
+'protein lasR' 
+'OC12HSL:protein lasR'
+
+
+
+'DNA plas--utr1--tetR'
+'RNAP:DNA plas--utr1--tetR'
+'AGTP:RNAP:DNA plas--utr1--tetR'
+'CUTP:RNAP:DNA plas--utr1--tetR'
+'CUTP:AGTP:RNAP:DNA plas--utr1--tetR'
+'term_RNAP:DNA plas--utr1--tetR'
+
+
+'DNA plas--utr1--tetR:OC12HSL:protein lasR'
+'RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR'
+'AGTP:RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR'
+'CUTP:RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR'
+'CUTP:AGTP:RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR'
+'term_RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR'
+
+
+'RNA utr1--tetR'
+'Ribo:RNA utr1--tetR'
+'AA:Ribo:RNA utr1--tetR'
+'AA:AGTP:Ribo:RNA utr1--tetR'
+'term_Ribo:RNA utr1--tetR'
+
+'RNA utr1--tetR:RNase'
+'Ribo:RNA utr1--tetR:RNase'
+'AA:Ribo:RNA utr1--tetR:RNase'
+'AA:AGTP:Ribo:RNA utr1--tetR:RNase'
+'term_Ribo:RNA utr1--tetR:RNase'
+
+'protein tetR'
+'protein tetRdimer'
+'2 aTc:protein tetRdimer'
+
+
+%% deGFP combinatorial promoter tx species. might have an error. 
+'DNA plas_ptet--utr1--deGFP'
+'RNAP:DNA plas_ptet--utr1--deGFP'
+----
+does this dna not bind agtp cutp without activation? maybe thats ok?
+----
+
+'DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR'
+'RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR'
+'AGTP:RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR'
+'CUTP:RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR'
+'CUTP:AGTP:RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR'
+'term_RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR'
+
+'DNA plas_ptet--utr1--deGFP:protein tetRdimer'
+'DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR:protein tetRdimer'
+'RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR:protein tetRdimer'
+
+
+'RNA utr1--deGFP'
+'Ribo:RNA utr1--deGFP'
+'AA:Ribo:RNA utr1--deGFP'
+'AA:AGTP:Ribo:RNA utr1--deGFP'
+'term_Ribo:RNA utr1--deGFP'
+
+
+'RNA utr1--deGFP:RNase'
+'Ribo:RNA utr1--deGFP:RNase'
+'AA:Ribo:RNA utr1--deGFP:RNase'
+'AA:AGTP:Ribo:RNA utr1--deGFP:RNase'
+'term_Ribo:RNA utr1--deGFP:RNase'
+
+'protein deGFP'
+'protein deGFP*'
+
+--------
+

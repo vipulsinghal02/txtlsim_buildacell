@@ -1,0 +1,218 @@
+%!TEX root = usersmanual.tex
+\chapter{\textsc{Core Functionalities}} 
+%% INTRODUCTION
+	%\section{Introduction}
+%	<Add a diagram showing the main species and reactions. The full list of reactions can be found in the appendix.>
+%% USER COMMANDS	
+	\section{User Commands}	
+	Here we give details about the various functions you will be using in the modelling toolbox. 	
+
+%%%% TXTL_EXTRACT	
+		\subsection*{\texttt{txtl\_extract}}
+			Set up a tube containing the TXTL 'Extract'. This is usually the first function to be called, and sets up various basic reaction rates, species and reactions. It takes the name of a configuration file containing parameter values as an input and returns a pointer to a Simbiology model object.  \\	
+			\\
+			The syntax and the usage of this function are summarized below, along with the species, reactions, parameters, and initial concentrations the function sets up:
+			
+			\begin{tabular}{p{2cm}|p{13cm}}
+			Syntax & \texttt{tube = txtl\_extract(name)}\\ \hline
+			Input & \texttt{name}: (string) name of extract \\ \hline
+			Output & \texttt{tube}: pointer to Simbiology model object\\ \hline
+			Usage & \texttt{tube1 = txtl\_extract('E6');}\\ \hline
+			Species & RNAP, Ribo, $\sigma 28$ and $\sigma 70$, RecBCD, RNA-ase \\ \hline
+			Reactions & Formation of RNAP70 and sequestration of RecBCD \\ \hline
+			Parameters & Set-up reaction rates, AA and NTP models, and initial amounts defined in the \texttt{txtl\_reaction\_config} class. See \texttt{txtl\_reaction\_config} in \S 3.3 for more information. This function also sets-up the initial amounts for Ribosomes, RNAP,  $\sigma 28$ and $\sigma 70$. Their values can be found in the file, including the references they were extracted from. \\
+			\end{tabular}
+			
+%%%% TXTL_BUFFER			
+		\subsection*{\texttt{txtl\_buffer}}
+		Set up a tube containing the TXTL 'Buffer'. This sets up the NTP and AA species, with initial concentrations from the supplied configuration file (same as the one used for the 'Extract'). \\
+					
+			\begin{tabular}{p{2cm}|p{13cm}}
+			Syntax & \texttt{tube = txtl\_buffer(name)}\\ \hline
+			Input & \texttt{name}: (string) name of buffer. \\ \hline
+			Output & \texttt{tube}: pointer to Simbiology model object\\ \hline
+			Usage & \texttt{tube2 = txtl\_buffer('E6');}\\ \hline
+			Species & NTP and AA \\
+			\end{tabular}
+
+%%%% TXTL_NEWTUBE						
+		\subsection*{\texttt{txtl\_newtube}}	
+		Create a new model object ('tube') containing one compartment called 'contents'). \\	
+			
+			\begin{tabular}{p{2cm}|p{13cm}}
+			Syntax & \texttt{tube = txtl\_newtube(name)}\\ \hline
+			Input & \texttt{name}: (string) name of new tube. \\ \hline
+			Output & \texttt{tube}: pointer to Simbiology model object\\ \hline
+			Usage & \texttt{tube3 = txtl\_newtube('circuit');}\\
+			\end{tabular}	
+
+%%%% TXTL_ADD_DNA								
+		\subsection*{\texttt{txtl\_add\_dna}}
+			This function creates a piece of DNA that the user specifies, and sets up all the associated species and reaction objects, initial concentrations, and reaction rate parameters. The tube the DNA is placed in, the initial amount, and the type of DNA, 'linear' or 'plasmid', are specified by the user. The function returns a pointer to the DNA species object. \\ 
+			\\
+			This is summarized below:	
+			
+			\begin{tabular}{p{2cm}|p{13cm}}
+			Syntax & \texttt{dna = txtl\_add\_dna(tube, prom\_spec, rbs\_spec, gene\_spec, dna\_amount, type)}\\ \hline
+			Input &  \begin{itemize}
+				\item \texttt{tube}: pointer to the model object to add the DNA to.
+				\item \texttt{prom\_spec}: (string) string representing promoter. See below for details. 
+				\item \texttt{rbs\_spec}: (string) ribosome binding site with optional length in Base Pairs.
+				\item \texttt{gene\_spec}: (string) gene string. See below.
+				\item \texttt{dna\_amount}: (double) amount of DNA to be added, in nM. This will be the \textbf{final} concentration in the experiment after the tubes have been combined. 
+				\item \texttt{type}: (string) type of DNA: 'linear' or 'plasmid'. 
+				\end{itemize} \\ \hline
+			Output & \texttt{dna}: pointer to DNA object. \\ \hline
+			Usage & \texttt{dna\_tetR = txtl\_add\_dna(tube3, 'thio-junk(500)-ptet(50)', 'rbs(20)', 'tetR(647)-lva(40)-terminator(100)', 16, 'linear');}\\ \hline
+%			Species & {\color{red}<to be added later>}\\ \hline
+%			Reactions & {\color{red}<to be added later>}\\ \hline
+%			Parameters & {\color{red}<to be added later>}\\
+			\end{tabular}	
+			
+			\vspace{1\baselineskip}
+						
+The \texttt{prom\_spec} is a string containing the name of the promoter to be used (this is a necessary argument, and needs the corresponding promoter file to be present in the MATLAB search path), with an optional length in base pairs. If the length is not specified, the default length specified in a \textsf{txtl\_param\_<promoterName>.csv} file is used. There are two other optional strings that can be specified: a \texttt{'thio'} and a \texttt{'junk(n)'}, where n is an optional integer value. The \texttt{'thio'} string tells the Toolbox that a thiosulfate group is present , and this confers protection to the DNA from degradation. As of this release, the amount of protection is arbitrarily set, and will be corrected once the relevant experiments and system ID are carried out. Similarly, junk DNA slows down the DNA degradation rate by an amount proportional to the length of this DNA added, with the constant of proportionality to be determined. As an example, a full specification of this string would look like: \texttt{'thio-junk(500)-ptet(50)'}. Note that only 'linear' DNA can be degraded. 'plasmid' DNA does not degrade in this toolbox. 
+
+The \texttt{gene\_spec} string works similarly to the \texttt{prom\_spec} string. The name of the gene is required, and this must be associated with an existing protein file. Defaults work similarly as in \texttt{prom\_spec}, with a required component configuration file. The optional strings are: 'ssrA(n)' and 'terminator(n)', where ssRA is a degradation tag (length n) which marks the protein for degradation, and the terminator will have capabilities in future releases of the toolbox. 
+
+Note: Generally, the lengths in BP are used to calculate transcription and translation rates. These lengths will have greater prevalence in the calculation of reaction rates in future versions of the toolbox. 
+
+%%%% TXTL_COMBINE
+		\subsection*{\texttt{txtl\_combine}}
+				Combine the contents (species and reactions) of tubes to form a new tube. \\	
+			
+			\begin{tabular}{p{2cm}|p{13cm}}
+			Syntax & \texttt{Mobj = txtl\_combine(tubelist, vollist)}\\ \hline
+			Input & \texttt{tubelist} (vector of pointers) A list of tubes to combine together. \\ \hline
+			Output & \texttt{Mobj}: pointer to the new tube.\\ \hline
+			Usage & \texttt{Mobj = txtl\_combine([tube1, tube2, tube3]}\\
+			\end{tabular}
+				
+%%%% TXTL_RUNSIM					
+		\subsection*{\texttt{txtl\_runsim}} 
+		
+		Simulate model. \texttt{txtl\_runsim} is the main function to execute the MATLAB differential equation solvers to solve for the species concentration trajectories forward in time from a specified initial condition. It returns a vector array \texttt{t\_ode\_output} containing time points and a matrix array \texttt{x\_ode\_output} containing the corresponding species concentration values. \texttt{x\_ode\_output} is arranged such that each column corresponds to a species, and contains that species' concentrations at the time points corresponding to the points specified in \texttt{t\_ode\_output}. \\
+		
+		\begin{tabular}{p{2cm}|p{13cm}}
+			Syntax & \texttt{[simData] = txtl\_runsim(modelObj, simulationTime)}\\
+			& with the following variations: \\
+			& Input: \\
+			& \texttt{(Mobj)}\\
+			& \texttt{(Mobj ,simulationTime)}\\
+			& \texttt{(Mobj ,simulationTime, simData)}\\			
+			& \texttt{(Mobj ,simulationTime, t\_ode, x\_ode)}\\
+			& Output: \\
+			& \texttt{[simData]}\\
+			& \texttt{[t\_ode, x\_ode]}\\
+			& \texttt{[t\_ode, x\_ode, Mobj]}		\\	
+			& \texttt{[t\_ode, x\_ode, Mobj, simData]}	\\ 
+			\hline		
+			
+			Input &  \begin{itemize}
+				\item \texttt{modelObj}: pointer to the model object to simulate. This is the Simbiology model object returned by \texttt{txtl\_combine}.
+				\item \texttt{t\_ode}: optional vector array containing time point data from previous runs. See below for more information. 
+				\item \texttt{x\_ode}: optional matrix array containing species concentration trajectory data from previous runs. See below for more information.
+				\item \texttt{simData}: optional structure containing simulation data, such as names of species and previous simulation data.    
+				\end{itemize} \\ \hline
+			Output & \begin{itemize}
+				\item \texttt{t\_ode\_output}: vector array containing time point data from this run, appended to data from previous runs, if any. 
+				\item \texttt{x\_ode\_output}: matrix array containing species concentration trajectory data from this run, appended to data from previous runs, if any.
+				\item \texttt{Mobj}: model object the simulation was run on. 
+				\item \texttt{simData\_output}: optional structure containing simulation data, such as names of species.    
+				\end{itemize} \\ \hline
+			Usage & \texttt{[t\_ode, x\_ode, Mobj, simData] = txtl\_runsim(Mobj, simulationTime, t\_ode, x\_ode);}\\
+			\end{tabular}
+			\begin{comment}
+			\vspace{1\baselineskip}
+			When a Simbiology model is created, there is a default configuration set object associated with it, and we can use the \texttt{getconfigset} command to get a pointer to this object. This is illustrated below by using 'active' argument, since when the model object is created, the default configuration set is the active one. We can then set its properties like the end time we want our model to be simulated until: \\
+\texttt{configsetObj = getconfigset(Mobj, 'active');} \\
+\texttt{set(configsetObj, 'StopTime', 8*60*60)} \\
+
+After which we can execute \texttt{txtl\_runsim}: \\
+\texttt{[t\_ode, x\_ode, Mobj, simData] = txtl\_runsim(Mobj, configsetObj);} 
+% the configsetObj,. in a future version of this documentation, incluse sensitivity and events, and a more complete documentation on the configuratin set object. 
+\end{comment}
+\vspace{1\baselineskip}
+A useful feature of \texttt{txtl\_runsim} is that is allows one to 'continue' a simulation from the end point of a previous run, with new species of more of existing species added before the simulation is continued. This models the situation when additional reagents like inducers or proteins are added to an experimental preparation after the experiment has commenced. This can be done as follows: \\
+
+First call to \texttt{txt\_runsim} \\
+\texttt{[t\_ode, x\_ode, Mobj, simData] = txtl\_runsim(Mobj, simulationTime);} \\
+
+Execute other code, say, add some inducer: \\
+\texttt{aTc = txtl\_addspecies(mObj, 'aTc', 50);}\\
+
+Continue simulation:\\
+\texttt{[t\_ode2, x\_ode2, Mobj, simData] = txtl\_runsim(Mobj, t\_ode, x\_ode, simData);} \\
+
+The new arrays \texttt{t\_ode2, x\_ode2} contain the results of the first simulation appended to the results of the second simulation. Thus, one can simply plot these to view the results since the beginning of the first simulation. 
+
+
+		\subsection*{\texttt{txtl\_plot}}
+		Plotting command that simplifies the plotting of the evolution of the concentrations of the standard species: Proteins of interest, Resources, and DNA and RNA concentrations. \\
+		
+		\begin{tabular}{p{2cm}|p{13cm}}
+			Syntax & \texttt{txtl\_plot(t\_ode, x\_ode, Mobj);}\\
+			& or \\
+			& \texttt{txtl\_plot(t\_ode, x\_ode, Mobj, dataGroups);}\\		 \hline
+			Input &  \begin{itemize}
+				\item \texttt{t\_ode}: vector array containing time point data. 
+				\item \texttt{x\_ode}: matrix array, with each column containing data corresponding to the time evolution of the concentration of once species in the model. See \texttt{txtl\_runsim} for more details.  
+				\item \texttt{Mobj}: pointer to the model object associated with the data to be plotted.
+				\item \texttt{dataGroups}: these are optional cell arrays of strings which enable the user to customize what is plotted. We will provide documentation on these in a future version of this manual.  
+				\end{itemize} \\ \hline
+			Usage & \texttt{txtl\_plot(t\_ode, x\_ode, Mobj);}\\
+			& where \texttt{t\_ode, x\_ode} and \texttt{Mobj} are the variables defined in the file. 
+			\end{tabular}
+		% add info on data groups soon. 
+		
+%		\subsection*{txtl\_plot\_gui}
+		
+		\subsection*{\texttt{txtl\_addspecies}}
+			\texttt{txtl\_addspecies} allows the addition of any species directly to the model object. If this species is already present in the model, the function simply increases its concentration by the amount that is added. If the species is a protein and is not present in the model, then \texttt{txtl\_addspecies} adds the protein, and sets up all the associated species (dimers, complexes) and reactions (repression, induction, degradation, etc.). \\
+			
+			\begin{tabular}{p{2cm}|p{13cm}}
+			Syntax & \texttt{simBioSpecies = txtl\_addspecies(tube, name, amount)}\\ \hline
+			Input &  \begin{itemize}
+				\item \texttt{tube}: pointer to the model object to add the species to.
+				\item \texttt{name}: (string) name of the species to be added. See below for format of string.  
+				\item \texttt{amount}: (double) amount, in nM, of the species to add or to increase existing species' concentration by. 
+				\end{itemize} \\ \hline
+			Output & \texttt{simBioSpecies}: pointer to the species object just added.\\ \hline
+			Usage & \texttt{inducer = txtl\_addspecies(Mobj, 'aTc', 20);}\\
+			\end{tabular} \\
+			
+			
+			Note that \texttt{name} strings have the following format: \\
+			
+			\begin{tabular}{|p{2cm}|p{13cm}|}
+			\hline
+			Standard species & \texttt{'<name of specie>'}\\ 
+			& Examples: \texttt{'aTc'},  \texttt{'IPTG'},  \texttt{'ClpXP'} \\ \hline
+			Expressed proteins & \texttt{'protein <name of protein>'} \\
+			& Examples: \texttt{'protein tetR'},  \texttt{'protein lacI'} \\ \hline
+			\end{tabular}
+			% are there other types of species that can be added?
+					
+					
+		\subsection*{\texttt{txtl\_findspecies}}
+			\texttt{txtl\_findspecies} is a useful function to find the column index of a given species in the matrix data array (\texttt{x\_ode}) returned by \texttt{txtl\_runsim}. This enables the user to access the trajectory of any species in the model. \\
+			
+			\begin{tabular}{p{2cm}|p{13cm}}
+			Syntax & \texttt{indexlist = findspecies(Mobj, namelist)}\\ \hline
+			Input &  \begin{itemize}
+				\item \texttt{Mobj}: pointer to the model object get species indices from.
+				\item \texttt{namelist}: (string or cell array) name of the species to be searched for, or a cell array of such strings.
+				\end{itemize} \\ \hline
+			Output & \texttt{indexlist}: (integer or vector of integers) index of the species in the list of species in the model object, and in the data array \texttt{x\_ode} returned by \texttt{txtl\_runsim}. The vector is returned when \texttt{namelist} is a cell array, and the entries of the vector correspond to the indices for the entires in \texttt{namelist}. \\ \hline
+			Usage & \texttt{iGFP = findspecies(Mobj, 'protein deGFP*');}\\
+			& \texttt{iRNAP28\_DNA\_complex = findspecies(Mobj,'RNAP28:DNA p28\_ptet-{}-rbs-{}-deGFP')}
+			\end{tabular} \\
+			
+			We can use the output of this function to plot the trajectory of the species as follows: \\
+		\texttt{iGFP = findspecies(Mobj, 'protein deGFP*');}\\
+  		\texttt{plot(t\_ode, x\_ode(:, iGFP));}	\\
+  		  		
+		or use the index directly: \\	
+		\texttt{plot(t\_ode\_,x\_ode(:,findspecies(Mobj,'DNA p28\_ptet-{}-rbs-{}-deGFP:protein tetRdimer')),'r')} \\
+		
+		Note: one can see a list of all the species in the model by running the command \texttt{speciesNames = get(Mobj.species, 'name')}, where \texttt{Mobj} is the model object. 
