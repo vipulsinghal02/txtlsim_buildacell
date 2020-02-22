@@ -4,7 +4,7 @@ This package contains the txtlsim toolbox, which can be used to simulate the che
 <!-- 
 The second toolbox is called mcmc_simbio. This is a concurrent Bayesian parameter inference toolbox for MATLAB Simbiology models. The Bayesian parameter inference is performed using a modification of Aslak Grinsted's MATLAB implementation of the affine invariant ensemble Metropolis-Hastings MCMC sampler (ref). We have added support for what we call 'concurrent' parameter inference, which refers to the capability to estimate a common set of parameters that get used simultaneously and in arbitrary combinations in multiple experiments/models. More information can be found below.  -->
 
-# The Toolboxes
+# The Toolbox
 
 ## Getting the toolbox and running some simple examples
 
@@ -25,7 +25,12 @@ Start with typing in `geneexpr` into the command window. This should run a const
 
 Next, run the `negautoreg` example in the command line. Again, you should see a plot of the species in the system, and no errors. This example simulates the negative autoregulation circuit. 
 
-Type in `edit TXTL_tutorial` into the command line to open the tutorial file. You can also use the MATLAB publisher button to publish this file, and look at it in the MATLAB help file markup. We recommend running through the examples in this file, and exploring the reactions, species, etc set up in this file. Familiarity with the MATLAB Simbiology command line is helpful here. To learn more about Simbiology, go to the [Getting Started Using the Simbiology Command Line](https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html) page. 
+Type in `edit TXTL_tutorial` into the command line to open the tutorial file. We recommend running through the examples in this file, and exploring the reactions, species, etc set up in this file. Familiarity with the MATLAB Simbiology command line is helpful here. To learn more about Simbiology, go to the [Getting Started Using the Simbiology Command Line](https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html) page. 
+
+You can also use the MATLAB publisher button to publish this file, and look at it in the MATLAB help file markup. 
+
+You can also type `edit TXTL_workshop_scripts` into the command line and run the code in this file. It contains the constitutive expression, negative autoregulation, induction and IFFL circuit examples. 
+
 <!-- 
 ### mcmc_simbio examples
 
