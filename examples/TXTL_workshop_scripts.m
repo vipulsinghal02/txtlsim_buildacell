@@ -5,6 +5,7 @@
 %% Geneexpr with and without protein degradation
 
 clear all; close all; clc
+
 tube1 = txtl_extract('E30VNPRL');
 tube2 = txtl_buffer('E30VNPRL');
 tube3 = txtl_newtube('geneexpr_noClpX');

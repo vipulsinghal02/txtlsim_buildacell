@@ -36,7 +36,7 @@
 % IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 % POSSIBILITY OF SUCH DAMAGE.
 
-function varargout = txtl_prom_pOR1OR2(mode, tube, dna, rna,varargin)
+function varargout = txtl_prom_pOR2OR1(mode, tube, dna, rna,varargin)
 
 % Create strings for reactants and products
 DNA = ['[' dna.Name ']'];		% DNA species name for reactions
@@ -44,7 +44,7 @@ RNA = ['[' rna.Name ']'];		% RNA species name for reactions
 RNAP = 'RNAP';			% RNA polymerase name for reactions
 RNAPbound = ['RNAP:' dna.Name];
 % importing the corresponding parameters
-paramObj = txtl_component_config('pOR1OR2');
+paramObj = txtl_component_config('pOR2OR1');
 
 
 %%%%%%%%%%%%%%%%%%% DRIVER MODE: Setup Species %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -58,7 +58,7 @@ if strcmp(mode.add_dna_driver, 'Setup Species')
     elseif nargin~=5
         error('the number of argument should be 5 or 8, not %d',nargin);
     end
-    defaultBasePairs = {'pOR1OR2','junk','thio';...
+    defaultBasePairs = {'pOR2OR1','junk','thio';...
         paramObj.Promoter_Length,paramObj.Junk_Length,paramObj.Thio_Length};
     promoterData = txtl_setup_default_basepair_length(tube,promoterData,...
         defaultBasePairs);
@@ -85,8 +85,8 @@ elseif strcmp(mode.add_dna_driver,'Setup Reactions')
         error('the number of argument should be 5 or 8, not %d',nargin);
     end
     % Parameters that describe this promoter
-    parameters = {'TXTL_POR1OR2_RNAPbound_F',paramObj.RNAPbound_Forward;...
-        'TXTL_POR1OR2_RNAPbound_R',paramObj.RNAPbound_Reverse};
+    parameters = {'TXTL_POR2OR1_RNAPbound_F',paramObj.RNAPbound_Forward;...
+        'TXTL_POR2OR1_RNAPbound_R',paramObj.RNAPbound_Reverse};
     % Set up binding reaction
     txtl_addreaction(tube,[DNA ' + ' RNAP ' <-> [' RNAPbound ']'],...
         'MassAction',parameters);
@@ -107,7 +107,7 @@ elseif strcmp(mode.add_dna_driver,'Setup Reactions')
         for k = 1:size(listOfcLambdadimer,1)
             txtl_addreaction(tube,...
                 [DNA ' + ' listOfcLambdadimer{k} ' <-> [' dna.name ':' listOfcLambdadimer{k} ']'],...
-                'MassAction',{'pOR1OR2_sequestration_F',getDNASequestrationRates(paramObj,'F');...
+                'MassAction',{'pOR2OR1_sequestration_F',getDNASequestrationRates(paramObj,'F');...
                 'pOR1OR2_sequestration_R',getDNASequestrationRates(paramObj,'R')});
             
         end
@@ -115,7 +115,7 @@ elseif strcmp(mode.add_dna_driver,'Setup Reactions')
     
     %%%%%%%%%%%%%%%%%%% DRIVER MODE: error handling %%%%%%%%%%%%%%%%%%%%%%%%%%%
 else
-    error('txtltoolbox:txtl_prom_pOR1OR2:undefinedmode', ...
+    error('txtltoolbox:txtl_prom_pOR2OR1:undefinedmode', ...
         'The possible modes are ''Setup Species'' and ''Setup Reactions''.');
 end
 end

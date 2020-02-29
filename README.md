@@ -4,7 +4,7 @@ This package contains the txtlsim toolbox, which can be used to simulate the che
 <!-- 
 The second toolbox is called mcmc_simbio. This is a concurrent Bayesian parameter inference toolbox for MATLAB Simbiology models. The Bayesian parameter inference is performed using a modification of Aslak Grinsted's MATLAB implementation of the affine invariant ensemble Metropolis-Hastings MCMC sampler (ref). We have added support for what we call 'concurrent' parameter inference, which refers to the capability to estimate a common set of parameters that get used simultaneously and in arbitrary combinations in multiple experiments/models. More information can be found below.  -->
 
-# The Toolboxes
+# The Toolbox
 
 ## Getting the toolbox and running some simple examples
 
