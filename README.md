@@ -25,7 +25,12 @@ Start with typing in `geneexpr` into the command window. This should run a const
 
 Next, run the `negautoreg` example in the command line. Again, you should see a plot of the species in the system, and no errors. This example simulates the negative autoregulation circuit. 
 
-Type in `edit TXTL_tutorial` into the command line to open the tutorial file. You can also use the MATLAB publisher button to publish this file, and look at it in the MATLAB help file markup. We recommend running through the examples in this file, and exploring the reactions, species, etc set up in this file. Familiarity with the MATLAB Simbiology command line is helpful here. To learn more about Simbiology, go to the [Getting Started Using the Simbiology Command Line](https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html) page. 
+Type in `edit TXTL_tutorial` into the command line to open the tutorial file. We recommend running through the examples in this file, and exploring the reactions, species, etc set up in this file. Familiarity with the MATLAB Simbiology command line is helpful here. To learn more about Simbiology, go to the [Getting Started Using the Simbiology Command Line](https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html) page. 
+
+You can also use the MATLAB publisher button to publish this file, and look at it in the MATLAB help file markup. 
+
+You can also type `edit TXTL_workshop_scripts` into the command line and run the code in this file. It contains the constitutive expression, negative autoregulation, induction and IFFL circuit examples. 
+
 <!-- 
 ### mcmc_simbio examples
 
