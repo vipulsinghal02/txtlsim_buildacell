@@ -1,0 +1,12 @@
+RNAPbound_Forward, Expression, .006, estimate 
+RNAPbound_Reverse, Expression, 5, estimate
+
+RNAPbound_Forward_actv, Expression, 0.006*50, estimate 
+RNAPbound_Reverse_actv, Expression, 5, estimate
+
+Promoter_Length, Numeric, 100
+Thio_Length, Numeric, 500
+Junk_Length, Numeric, 0
+
+activation_F, Numeric, 2.86e-3
+activation_R, Numeric, 0.11e-4

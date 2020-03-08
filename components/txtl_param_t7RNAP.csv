@@ -1,0 +1,5 @@
+
+Gene_Length, Numeric, 1000
+LVA_tag_Length, Numeric, 40 
+Terminator_Length, Numeric, 30
+

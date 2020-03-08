@@ -1,0 +1,6 @@
+Gene_Length, Numeric, 647
+LVA_tag_Length, Numeric, 40 
+Terminator_Length, Numeric, 100
+
+Dimmerization_Forward, Numeric, 0.001, V. Sotiropoulos 2007 BMC Sys Bio Table 1 
+Dimmerization_Reverse, Numeric, 0.0001, V. Sotiropoulos 2007 BMC Sys Bio Table 1 

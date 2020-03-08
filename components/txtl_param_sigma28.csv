@@ -1,0 +1,12 @@
+RNAPbound_Forward, Expression, 10, 100 ms bind rate
+RNAPbound_Reverse, Expression, 0.1, Km of 10 
+
+Promoter_Length, Numeric, 50
+Thio_Length, Numeric, 500
+Junk_Length, Numeric, 0
+Gene_Length, Numeric, 1000
+LVA_tag_Length, Numeric, 40 
+Terminator_Length, Numeric, 100
+
+non_s70_factor_Forward, Numeric, 100, nM^-1s^-1
+non_s70_factor_Reverse, Numeric, 0.1, s^-1

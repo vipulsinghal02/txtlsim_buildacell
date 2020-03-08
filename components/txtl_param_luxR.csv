@@ -1,0 +1,8 @@
+Gene_Length, Numeric, 647
+LVA_tag_Length, Numeric, 40 
+Terminator_Length, Numeric, 100
+
+Protein_Inducer_Forward, Numeric, 2e-3, V. Sotiropoulos 2007 BMC Sys Bio Table 1
+Protein_Inducer_Reverse, Numeric, 0.001, V. Sotiropoulos 2007 BMC Sys Bio Table 1
+Inducer_Degradation, Numeric, 2.67e-3, 
+

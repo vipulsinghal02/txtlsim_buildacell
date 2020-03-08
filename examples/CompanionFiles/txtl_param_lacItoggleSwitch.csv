@@ -1,0 +1,24 @@
+RNAPbound_Forward, Expression, .0077, 
+RNAPbound_Reverse, Expression, 8, Km of 1um
+
+Promoter_Length, Numeric, 50
+Thio_Length, Numeric, 500
+Junk_Length, Numeric, 0
+Gene_Length, Numeric, 647
+LVA_tag_Length, Numeric, 40 
+Terminator_Length, Numeric, 100
+
+
+Dimmerization_Forward, Numeric, 5.637, Hsieh & Brenowitz 1997 JBC
+Dimmerization_Reverse, Numeric, 1 
+
+Tetramerization_Forward, Numeric, 5.37, Hsieh & Brenowitz 1997 JBC
+Tetramerization_Reverse, Numeric, 1 
+
+
+Protein_Inducer_Forward, Numeric, 0.1, !TODO: set up user defined parameters.
+Protein_Inducer_Reverse, Numeric, 0.01, 
+Inducer_Degradation, Numeric, 0.0001, 
+
+DNA_Sequestration_F, Numeric, 0.05,
+DNA_Sequestration_R, Numeric, 0.01,

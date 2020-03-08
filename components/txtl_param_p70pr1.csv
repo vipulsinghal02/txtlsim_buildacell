@@ -1,0 +1,6 @@
+RNAPbound_Forward, Numeric, .001, 100 ms bind rate
+RNAPbound_Reverse, Numeric, 6.875, Km of 10 (same as p70 from VN)
+
+Promoter_Length, Numeric, 55
+Thio_Length, Numeric, 500
+Junk_Length, Numeric, 0

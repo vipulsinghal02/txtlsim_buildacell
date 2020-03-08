@@ -46,7 +46,6 @@ octave-workspace
 # data files
 *.gc
 *.xlsx
-*.csv
 
 # movie files
 *.mp4

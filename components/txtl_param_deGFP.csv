@@ -1,0 +1,6 @@
+
+Gene_Length, Numeric, 674
+LVA_tag_Length, Numeric, 40 
+Terminator_Length, Numeric, 30
+
+Protein_Maturation, Expression, 0.0023001, 

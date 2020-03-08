@@ -1,0 +1,8 @@
+
+Gene_Length, Numeric, 1050
+LVA_tag_Length, Numeric, 40 
+Terminator_Length, Numeric, 30
+
+generic_rate1, Numeric, 0.1 
+generic_rate2, Numeric, 0.1  
+generic_rate3, Numeric, 0.1 
