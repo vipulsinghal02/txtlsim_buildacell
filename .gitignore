@@ -43,7 +43,6 @@ octave-workspace
 *.eps
 *.jpg
 *.svg
-*.fig
 # data files
 *.gc
 *.xlsx
