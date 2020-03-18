@@ -20,8 +20,8 @@ txtl_init;
 % Set up the standard TXTL tubes
 % These load up the RNAP, Ribosome and degradation enzyme concentrations
 % ``E30VNPRL'' refers to a configuration file 
-tube1 = txtl_extract('E30VNPRL');
-tube2 = txtl_buffer('E30VNPRL');
+tube1 = txtl_extract('E2');
+tube2 = txtl_buffer('E2');
 
 % Now set up a tube that will contain our DNA
 tube3 = txtl_newtube('gene_expression');
@@ -39,8 +39,6 @@ Mobj = txtl_combine([tube1, tube2, tube3]);
 % So now we just use standard Simbiology and MATLAB commands to run
 % and plot our results!
 
-cs = getconfigset(Mobj);
-set(cs.RuntimeOptions, 'StatesToLog', 'all');
 tic
 [simData] = txtl_runsim(Mobj,14*60*60);
 toc
@@ -59,14 +57,12 @@ txtl_plot(simData,Mobj);
 Mobj
 
 %%
-% There is one comaprtment, 2 events, 73 parameters, 47 Reactions, no rules
-% and 43 Species in the toolbox. We can explore further by typing,
-% for example, 
+% We can see the number of instances of the various subclasses of the 
+% model object. We can explore further by typing 
 Mobj.Species
 
 %%
-% We see that there are 43 species in the model, and they have somewhat 
-% different syntax for specification. Proteins, RNA and DNA generally follow the convention
+% Proteins, RNA and DNA generally follow the convention
 % protein CDS, RNA 5'UTR--CDS, DNA promoter--5' UTR--CDS, with
 % variations possible. There are also simply named `core' species like
 % RNAP, Ribo, RNase, etc. Finally we denote bound complexes with a colon,
@@ -125,15 +121,4 @@ ylabel('concentration, AU')
 xlabel('time, AU')
 curraxis = axis; 
 axis([curraxis(1:2) 0 curraxis(4)])
-% 
 
-
-
-%%
-
-%% EMACS editor support (ignore)
-%%
-% Automatically use matlab mode in emacs (keep at end of file)
-% Local variables:
-% mode: matlab
-% End:

@@ -6,8 +6,8 @@
 
 clear all; close all; clc
 
-tube1 = txtl_extract('E30VNPRL');
-tube2 = txtl_buffer('E30VNPRL');
+tube1 = txtl_extract('E2');
+tube2 = txtl_buffer('E2');
 tube3 = txtl_newtube('geneexpr_noClpX');
 txtl_add_dna(tube3, 'p70(50)', 'utr1(20)',...
     'deGFP(1000)-lva(20)', 10, 'plasmid');
@@ -17,8 +17,9 @@ txtl_plot(simData,Mobj);
 
 % Geneexpr with deg tag
 clear all;
-tube1 = txtl_extract('E30VNPRL');
-tube2 = txtl_buffer('E30VNPRL');
+%%
+tube1 = txtl_extract('E2');
+tube2 = txtl_buffer('E2');
 tube3 = txtl_newtube('geneexpr_ClpX');
 txtl_add_dna(tube3, 'p70(50)', 'utr1(20)',...
     'deGFP-lva(1000)', 10, 'plasmid');

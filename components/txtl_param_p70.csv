@@ -1,5 +1,5 @@
-RNAPbound_Forward, Numeric, 4.4817 , 
-RNAPbound_Reverse, Numeric, 60718 , old was 2074
+RNAPbound_Forward, Numeric, 4.4817 , exp(1.5) 
+RNAPbound_Reverse, Numeric, 729416 , R = KD*F old was 2074
 
 Promoter_Length, Numeric, 55
 Thio_Length, Numeric, 500

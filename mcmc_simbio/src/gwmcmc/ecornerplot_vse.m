@@ -76,11 +76,15 @@ end
 
 M=size(m,2);
 Np=size(m,1);
-if p.ess>Np
-    error('Effective Sample Size (ess) must be smaller than number of samples')
+
+if isnan(p.scatter) || ~p.scatter
+    if p.ess>Np
+        error('Effective Sample Size (ess) must be smaller than number of samples')
+    end
 end
+
 if M>25
-    error('Too many dimensions. You probably don''t want to make that many subplots. ')
+    warning('Too many dimensions. You probably don''t want to make that many subplots. Split the parameter set into smaller subsets?')
 end
 if isnan(p.scatter)
     p.scatter=Np<2000;
