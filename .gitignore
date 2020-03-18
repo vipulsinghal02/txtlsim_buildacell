@@ -38,7 +38,6 @@ octave-workspace
 *.todo
 
 # Image files
-*.png
 *.tiff
 *.eps
 *.jpg
