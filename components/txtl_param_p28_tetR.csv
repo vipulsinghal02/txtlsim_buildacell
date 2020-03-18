@@ -1,0 +1,18 @@
+RNAPbound_Forward, Expression, .006, estimate 
+RNAPbound_Reverse, Expression, 5, estimate
+
+Promoter_Length, Numeric, 100
+Thio_Length, Numeric, 500
+Junk_Length, Numeric, 0
+Gene_Length, Numeric, 647
+LVA_tag_Length, Numeric, 40 
+Terminator_Length, Numeric, 100
+
+
+Dimmerization_Forward, Numeric, 1, V. Sotiropoulos 2007 BMC Sys Bio Table 1 
+Dimmerization_Reverse, Numeric, 10, V. Sotiropoulos 2007 BMC Sys Bio Table 1 
+
+Protein_Inducer_Forward, Numeric, 2e-3, V. Sotiropoulos 2007 BMC Sys Bio Table 1
+Protein_Inducer_Reverse, Numeric, 0.001, V. Sotiropoulos 2007 BMC Sys Bio Table 1
+Inducer_Degradation, Numeric, 2.67e-3, 
+

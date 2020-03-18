@@ -1,0 +1,12 @@
+
+Gene_Length, Numeric, 1269
+LVA_tag_Length, Numeric, 40 
+Terminator_Length, Numeric, 30
+
+Protein_Maturation, Expression, log(2)/(30*60), protein maturation rate is 30 min
+
+prot_deg_F, Numeric, 1.0e-06
+prot_deg_R, Numeric, 5.0118e-05
+prot_deg_unfold, Numeric, 9.2611e-09
+
+ClpX_deg, Numeric, 1.7022e-08

@@ -1,0 +1,33 @@
+RNAPbound_Forward, Expression, 20, estimate plasR
+RNAPbound_Reverse, Expression, 400, estimate
+
+RNAPbound_Forward_2, Expression, 20, estimate ptet
+RNAPbound_Reverse_2, Expression, 400, estimate
+
+Promoter_Length, Numeric, 100
+Thio_Length, Numeric, 500
+Junk_Length, Numeric, 0
+Gene_Length, Numeric, 647
+LVA_tag_Length, Numeric, 40 
+Terminator_Length, Numeric, 100 
+
+Protein_Inducer_Forward, Numeric, 2e-1, 3OC12HSL
+Protein_Inducer_Reverse, Numeric, 0.05, 
+Inducer_Degradation, Numeric, 2.67e-6, 
+
+Protein_Inducer_Forward_2, Numeric, 1e-5, aTc
+Protein_Inducer_Reverse_2, Numeric, 1.0e-1, 
+Inducer_Degradation_2, Numeric, 2.67e-8, 
+
+activation_F, Numeric, 1, 3OC12HSL
+activation_R, Numeric, 0.02
+
+RNAPbound_Forward_actv, Numeric, 1, 3OC12HSL
+RNAPbound_Reverse_actv, Numeric, 0.02
+
+DNA_Sequestration_F, Numeric, 2.5e-1, from ptet file
+DNA_Sequestration_R, Numeric, 1.11e-4, 
+
+Combinatorial_activ_knockoff_F, Numeric, 1, document or estimate,
+Combinatorial_activ_knockoff_R, Numeric, 0.1, document or estimate,
+

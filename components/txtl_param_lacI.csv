@@ -1,0 +1,12 @@
+Gene_Length, Numeric, 647
+LVA_tag_Length, Numeric, 40 
+Terminator_Length, Numeric, 100
+
+Dimmerization_Forward, Numeric, 1.1, Hsieh & Brenowitz 1997 JBC
+Dimmerization_Reverse, Numeric, 1 
+
+Tetramerization_Forward, Numeric, 1.1, Hsieh & Brenowitz 1997 JBC
+Tetramerization_Reverse, Numeric, 1 
+
+Protein_Inducer_Forward, Numeric, 0.1, !TODO: set up user defined parameters.
+Protein_Inducer_Reverse, Numeric, 0.01, 

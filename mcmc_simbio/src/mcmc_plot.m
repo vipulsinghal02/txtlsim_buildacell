@@ -51,7 +51,7 @@ p.addParameter('scatter', true, @islogical);
 % p.addParameter('range', [99.5]);
 p.addParameter('names', []);
 p.addParameter('support', []); % if isempty, do nothing.
-p.addParameter('ess', 1000, @isnumeric);
+p.addParameter('ess', 100, @isnumeric);
 p.addParameter('fullmatrix', false, @islogical);
 p.addParameter('color', [.6 .35 .3]);
 p.addParameter('grid', false, @islogical);
