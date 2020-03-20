@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>TXTL Tutorial</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-03-18"><meta name="DC.source" content="txtl_tutorial.m"><style type="text/css">
+      --><title>Your very first tutorial on the txtlsim toolbox</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-03-19"><meta name="DC.source" content="tutorial.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,8 +66,8 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>TXTL Tutorial</h1><!--introduction--><p>txtl_tutorial.m - basic usage of the TXTL modeling toolbox</p><p>Vipul Singhal, 28 July 2017</p><p>This file contains a simple tutorial of the TXTL modeling toolbox. You will learn about setting up a negative autoregulation circuit, simulating it, plotting the results, creating variations of the circuit, and understanding the object structure of the models.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Initializing the toolbox</a></li><li><a href="#2">Negative Autoregulation - A simple example</a></li><li><a href="#3">plot the result</a></li><li><a href="#4">Model Structure</a></li><li><a href="#15">Plotting individual species</a></li></ul></div><h2 id="1">Initializing the toolbox</h2><p>Use this command to add the subdirectories needed to your matlab path. To be run each time you begin a new TXTL toolbox session.</p><pre class="codeinput">txtl_init;
-</pre><h2 id="2">Negative Autoregulation - A simple example</h2><p>Here we demonstrate the setup of a genetic circuit where a transcription factor represses its own expression.</p><p>Set up the standard TXTL tubes These load up the RNAP, Ribosome and degradation enzyme concentrations ``E30VNPRL'' refers to a configuration file</p><pre class="codeinput">tube1 = txtl_extract(<span class="string">'E2'</span>);
+  </style></head><body><div class="content"><h1>Your very first tutorial on the txtlsim toolbox</h1><!--introduction--><p>tutorial.m - basic usage of the TXTL modeling toolbox</p><p>Vipul Singhal, 28 July 2017</p><p>This file contains a simple tutorial of the TXTL modeling toolbox. You will learn about setting up a constitutive expression circuit, and a negative autoregulation circuit. You will also learn the basics of plotting the results, creating simple variations of a circuit, and of how the model is structured.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Initializing the toolbox</a></li><li><a href="#2">Negative Autoregulation - A simple example</a></li><li><a href="#3">Plot the result</a></li><li><a href="#4">Model structure</a></li><li><a href="#20">Plotting individual species</a></li></ul></div><h2 id="1">Initializing the toolbox</h2><p>Remember to set the working directory to the trunk directory of the toolbox. The trunk directory is where folders like ``core'', and ``components''live. Here is a snapshot of this directory on the author's computer.</p><p><img vspace="5" hspace="5" src="/Users/vipulsinghal/Dropbox/Documents/toolbox/txtlsim_buildacell/docs/trunk_dir.png" alt=""> </p><p>!TODO test this. does the image show up online? Probably not.</p><p>Use this command to add the subdirectories needed to your matlab path. To be run each time you begin a new TXTL toolbox session.</p><pre class="codeinput">txtl_init;
+</pre><h2 id="2">Negative Autoregulation - A simple example</h2><p>Here we demonstrate the setup of a genetic circuit where a transcription factor represses its own expression.</p><p>Set up the standard TXTL tubes These load up the RNAP, Ribosome and degradation enzyme concentrations ``E2'' refers to a configuration file</p><pre class="codeinput">tube1 = txtl_extract(<span class="string">'E2'</span>);
 tube2 = txtl_buffer(<span class="string">'E2'</span>);
 
 <span class="comment">% Now set up a tube that will contain our DNA</span>
@@ -91,10 +91,10 @@ tic
 toc
 t_ode = simData.Time;
 x_ode = simData.Data;
-</pre><pre class="codeoutput">Elapsed time is 0.638855 seconds.
-</pre><h2 id="3">plot the result</h2><p>The following function plots the proteins, RNA and resources in the toolbox. In the next section we delve deeper into the object oriented structure of the model, and how to plot arbitrary species in the model.</p><pre class="codeinput">txtl_plot(simData,Mobj);
+</pre><pre class="codeoutput">Elapsed time is 0.456766 seconds.
+</pre><h2 id="3">Plot the result</h2><p>The following function plots the proteins, RNA and resources in the toolbox. In the next section we delve deeper into the object oriented structure of the model, and how to plot arbitrary species in the model.</p><pre class="codeinput">txtl_plot(simData,Mobj);
 </pre><pre class="codeoutput">Current plot held
-</pre><img vspace="5" hspace="5" src="txtl_tutorial_01.png" alt=""> <h2 id="4">Model Structure</h2><p>The model is organized as a model object, with sub objects specifying Parameters, Reactions, Species, etc. Type in</p><pre class="codeinput">Mobj
+</pre><img vspace="5" hspace="5" src="tutorial_01.png" alt=""> <h2 id="4">Model structure</h2><p>The model is organized as a model object, with sub objects specifying Parameters, Reactions, Species, etc. Type in</p><pre class="codeinput">Mobj
 </pre><pre class="codeoutput">
    SimBiology Model - mix_of_E2_E2_gene_expression 
 
@@ -160,7 +160,7 @@ x_ode = simData.Data;
    47        contents        AA:Ribo:RNA utr1--deGFP:RNase              0                 
    48        contents        AGTP_USED                                  0                 
 
-</pre><p>Proteins, RNA and DNA generally follow the convention protein CDS, RNA 5'UTR--CDS, DNA promoter--5' UTR--CDS, with variations possible. There are also simply named `core' species like RNAP, Ribo, RNase, etc. Finally we denote bound complexes with a colon, for example, Species 1:Species 2.</p><p>We also see that each of them has certain other associated properties. You can explore further by accessing individual species using their index, and using the `get' and `set' commands to get and set the properties of the species. For example, try typing</p><pre class="codeinput">Mobj.Species(1)
+</pre><p>Proteins, RNA and DNA generally follow the naming convention descirbed in the paper, with, for example, DNA specified with ``DNA promoter--5' UTR--CDS''.</p><p>There are also simply named `core' species like RNAP, Ribo, RNase, etc. Finally we denote bind together speices into complexes with a colon, for example, Species 1:Species 2.</p><p>We also see that each of them has certain other associated properties. You can explore further by accessing individual species using their index, and using the `get' and `set' commands to get and set the properties of the species. For example, try typing</p><pre class="codeinput">Mobj.Species(1)
 </pre><pre class="codeoutput">
    SimBiology Species Array
 
@@ -183,33 +183,162 @@ x_ode = simData.Data;
 </pre><p>and then using the set command to set its initial concentration to 50 units:</p><pre class="codeinput">set(Mobj.Species(1), <span class="string">'InitialAmount'</span>, 50)
 </pre><p>Learn more about the get and set commands by typing in</p><pre class="language-matlab">help <span class="string">get</span>
 help <span class="string">set</span>
-</pre><p>You may read more about how model objects are arranged in Simbiology by working through the <a href="https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html">Tutorial</a>. Feel free to browse the reactions and other subproperties by individually typing in commands like</p><pre class="language-matlab">Mobj.reactions
-get(Mobj.Reactions)
-get(Mobj.Reactions(1))
-Mobj.Reactions(1).ReactionRate
-Mobj.Reactions(1).KineticLaw
-get(Mobj.Reactions(1).KineticLaw)
-</pre><p>and so on.</p><h2 id="15">Plotting individual species</h2><p>You can also plot the trajectories of any of the species in the model. Use the function findspecies to get the index of the species object of interest. For example, if you want to plot the trajectory of the dimerized tetR protein, you could type in</p><pre class="codeinput">tetRindex = findspecies(Mobj, <span class="string">'protein tetRdimer'</span>);
+</pre><p>You may read more about how model objects are arranged in Simbiology by working through the <a href="https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html">Tutorial</a>. Feel free to browse the reactions and other subproperties by individually typing in commands shown below:</p><p>The reactions of the model object:</p><pre class="codeinput">  Mobj.reactions
+</pre><pre class="codeoutput">
+   SimBiology Reaction Array
+
+   Index:    Reaction:
+   1         [protein tetRdimer] + 2 aTc &lt;-&gt; [2 aTc:protein tetRdimer]
+   2         2 [protein tetR] &lt;-&gt; [protein tetRdimer]
+   3         [RNA utr1--tetR] + Ribo &lt;-&gt; [Ribo:RNA utr1--tetR]
+   4         [DNA ptet--utr1--tetR] + RNAP &lt;-&gt; [RNAP:DNA ptet--utr1--tetR]
+   5         [CUTP:AGTP:RNAP:DNA ptet--utr1--tetR] -&gt; [term_RNAP:DNA ptet--utr1--tetR] + [RNA utr1--tetR]
+   6         [CUTP:AGTP:RNAP:DNA ptet--utr1--tetR] -&gt; [RNAP:DNA ptet--utr1--tetR]
+   7         [term_RNAP:DNA ptet--utr1--tetR] -&gt; RNAP + [DNA ptet--utr1--tetR]
+   8         [RNAP:DNA ptet--utr1--tetR] + AGTP &lt;-&gt; [AGTP:RNAP:DNA ptet--utr1--tetR]
+   9         [RNAP:DNA ptet--utr1--tetR] + CUTP &lt;-&gt; [CUTP:RNAP:DNA ptet--utr1--tetR]
+   10        [AGTP:RNAP:DNA ptet--utr1--tetR] + CUTP &lt;-&gt; [CUTP:AGTP:RNAP:DNA ptet--utr1--tetR]
+   11        [CUTP:RNAP:DNA ptet--utr1--tetR] + AGTP &lt;-&gt; [CUTP:AGTP:RNAP:DNA ptet--utr1--tetR]
+   12        [DNA ptet--utr1--tetR] + [protein tetRdimer] &lt;-&gt; [DNA ptet--utr1--tetR:protein tetRdimer]
+   13        [Ribo:RNA utr1--tetR] + AA &lt;-&gt; [AA:Ribo:RNA utr1--tetR]
+   14        [AA:Ribo:RNA utr1--tetR] + AGTP &lt;-&gt; [AA:AGTP:Ribo:RNA utr1--tetR]
+   15        [AA:AGTP:Ribo:RNA utr1--tetR] -&gt; [term_Ribo:RNA utr1--tetR] + [protein tetR]
+   16        [AA:AGTP:Ribo:RNA utr1--tetR] -&gt; [term_Ribo:RNA utr1--tetR]
+   17        [term_Ribo:RNA utr1--tetR] -&gt; [RNA utr1--tetR] + Ribo
+   18        [RNA utr1--tetR] + RNase &lt;-&gt; [RNA utr1--tetR:RNase]
+   19        [RNA utr1--tetR:RNase] -&gt; RNase
+   20        [Ribo:RNA utr1--tetR] + RNase &lt;-&gt; [Ribo:RNA utr1--tetR:RNase]
+   21        [Ribo:RNA utr1--tetR:RNase] -&gt; RNase + Ribo
+   22        [AA:AGTP:Ribo:RNA utr1--tetR] + RNase &lt;-&gt; [AA:AGTP:Ribo:RNA utr1--tetR:RNase]
+   23        [AA:AGTP:Ribo:RNA utr1--tetR:RNase] -&gt; RNase + AA + AGTP + Ribo
+   24        [term_Ribo:RNA utr1--tetR] + RNase &lt;-&gt; [term_Ribo:RNA utr1--tetR:RNase]
+   25        [term_Ribo:RNA utr1--tetR:RNase] -&gt; RNase + Ribo
+   26        [AA:Ribo:RNA utr1--tetR] + RNase &lt;-&gt; [AA:Ribo:RNA utr1--tetR:RNase]
+   27        [AA:Ribo:RNA utr1--tetR:RNase] -&gt; RNase + AA + Ribo
+   28        [protein deGFP] -&gt; [protein deGFP*]
+   29        [RNA utr1--deGFP] + Ribo &lt;-&gt; [Ribo:RNA utr1--deGFP]
+   30        [DNA ptet--utr1--deGFP] + RNAP &lt;-&gt; [RNAP:DNA ptet--utr1--deGFP]
+   31        [CUTP:AGTP:RNAP:DNA ptet--utr1--deGFP] -&gt; [term_RNAP:DNA ptet--utr1--deGFP] + [RNA utr1--deGFP]
+   32        [CUTP:AGTP:RNAP:DNA ptet--utr1--deGFP] -&gt; [RNAP:DNA ptet--utr1--deGFP]
+   33        [term_RNAP:DNA ptet--utr1--deGFP] -&gt; RNAP + [DNA ptet--utr1--deGFP]
+   34        [RNAP:DNA ptet--utr1--deGFP] + AGTP &lt;-&gt; [AGTP:RNAP:DNA ptet--utr1--deGFP]
+   35        [RNAP:DNA ptet--utr1--deGFP] + CUTP &lt;-&gt; [CUTP:RNAP:DNA ptet--utr1--deGFP]
+   36        [AGTP:RNAP:DNA ptet--utr1--deGFP] + CUTP &lt;-&gt; [CUTP:AGTP:RNAP:DNA ptet--utr1--deGFP]
+   37        [CUTP:RNAP:DNA ptet--utr1--deGFP] + AGTP &lt;-&gt; [CUTP:AGTP:RNAP:DNA ptet--utr1--deGFP]
+   38        [DNA ptet--utr1--deGFP] + [protein tetRdimer] &lt;-&gt; [DNA ptet--utr1--deGFP:protein tetRdimer]
+   39        [Ribo:RNA utr1--deGFP] + AA &lt;-&gt; [AA:Ribo:RNA utr1--deGFP]
+   40        [AA:Ribo:RNA utr1--deGFP] + AGTP &lt;-&gt; [AA:AGTP:Ribo:RNA utr1--deGFP]
+   41        [AA:AGTP:Ribo:RNA utr1--deGFP] -&gt; [term_Ribo:RNA utr1--deGFP] + [protein deGFP]
+   42        [AA:AGTP:Ribo:RNA utr1--deGFP] -&gt; [term_Ribo:RNA utr1--deGFP]
+   43        [term_Ribo:RNA utr1--deGFP] -&gt; [RNA utr1--deGFP] + Ribo
+   44        [RNA utr1--deGFP] + RNase &lt;-&gt; [RNA utr1--deGFP:RNase]
+   45        [RNA utr1--deGFP:RNase] -&gt; RNase
+   46        [Ribo:RNA utr1--deGFP] + RNase &lt;-&gt; [Ribo:RNA utr1--deGFP:RNase]
+   47        [Ribo:RNA utr1--deGFP:RNase] -&gt; RNase + Ribo
+   48        [AA:AGTP:Ribo:RNA utr1--deGFP] + RNase &lt;-&gt; [AA:AGTP:Ribo:RNA utr1--deGFP:RNase]
+   49        [AA:AGTP:Ribo:RNA utr1--deGFP:RNase] -&gt; RNase + AA + AGTP + Ribo
+   50        [term_Ribo:RNA utr1--deGFP] + RNase &lt;-&gt; [term_Ribo:RNA utr1--deGFP:RNase]
+   51        [term_Ribo:RNA utr1--deGFP:RNase] -&gt; RNase + Ribo
+   52        [AA:Ribo:RNA utr1--deGFP] + RNase &lt;-&gt; [AA:Ribo:RNA utr1--deGFP:RNase]
+   53        [AA:Ribo:RNA utr1--deGFP:RNase] -&gt; RNase + AA + Ribo
+   54        AGTP -&gt; AGTP_USED
+
+</pre><p>The properties of the reactions that can be queried:</p><pre class="codeinput">  get(Mobj.Reactions)
+</pre><pre class="codeoutput">  54&times;1 struct array with fields:
+
+    Active
+    Annotation
+    Name
+    Notes
+    Parent
+    Products
+    Reactants
+    Reaction
+    ReactionRate
+    Reversible
+    Stoichiometry
+    KineticLaw
+    Tag
+    Type
+    UserData
+
+</pre><p>The properties of the first reaction:</p><pre class="codeinput">  get(Mobj.Reactions(1))
+</pre><pre class="codeoutput">           Active: 1
+       Annotation: ''
+             Name: ''
+            Notes: ''
+           Parent: [1&times;1 SimBiology.Model]
+         Products: [1&times;1 SimBiology.Species]
+        Reactants: [2&times;1 SimBiology.Species]
+         Reaction: '[protein tetRdimer] + 2 aTc &lt;-&gt; [2 aTc:protein tetRdimer]'
+     ReactionRate: 'TXTL_INDUCER_TETR_ATC_F*[protein tetRdimer]*aTc^2 - TXTL_INDUCER_TETR_ATC_R*[2 aTc:protein tetRdimer]'
+       Reversible: 1
+    Stoichiometry: [-1 -2 1]
+       KineticLaw: [1&times;1 SimBiology.KineticLaw]
+              Tag: ''
+             Type: 'reaction'
+         UserData: []
+
+</pre><p>The reaction rate of the first reaction:</p><pre class="codeinput">  Mobj.Reactions(1).ReactionRate
+</pre><pre class="codeoutput">
+ans =
+
+    'TXTL_INDUCER_TETR_ATC_F*[protein tetRdimer]*aTc^2 - TXTL_INDUCER_TETR_ATC_R*[2 aTc:protein tetRdimer]'
+
+</pre><p>The Kinetic law object used by the first reaction:</p><pre class="codeinput">  Mobj.Reactions(1).KineticLaw
+</pre><pre class="codeoutput">
+   SimBiology Kinetic Law Array
+
+   Index:    KineticLawName:
+   1         MassAction
+
+</pre><p>All the visible properties of the kinetic law object of the first reaction:</p><pre class="codeinput">  get(Mobj.Reactions(1).KineticLaw)
+</pre><pre class="codeoutput">                Annotation: ''
+                      Name: ''
+                     Notes: ''
+                       Tag: ''
+                      Type: 'kineticlaw'
+                  UserData: []
+                Expression: 'MassAction'
+            KineticLawName: 'MassAction'
+                Parameters: [2&times;1 SimBiology.Parameter]
+        ParameterVariables: {1&times;2 cell}
+    ParameterVariableNames: {1&times;2 cell}
+                    Parent: [1&times;1 SimBiology.Reaction]
+          SpeciesVariables: {'MassAction Species'}
+      SpeciesVariableNames: {1&times;3 cell}
+
+</pre><p>and so on.</p><h2 id="20">Plotting individual species</h2><p>You can also plot the trajectories of any of the species in the model. Use the function findspecies to get the index of the species object of interest. For example, if you want to plot the trajectory of the dimerized tetR protein, you could type in</p><pre class="codeinput">tetRindex = findspecies(Mobj, <span class="string">'protein tetRdimer'</span>);
 figure
 plot(simData.Time/3600, simData.data(:,tetRindex));
 title(<span class="string">'Dimerized tetR concentration'</span>)
-ylabel(<span class="string">'concentration, AU'</span>)
-xlabel(<span class="string">'time, AU'</span>)
+ylabel(<span class="string">'concentration, nM'</span>)
+xlabel(<span class="string">'time, h'</span>)
 curraxis = axis;
 axis([curraxis(1:2) 0 curraxis(4)])
-</pre><img vspace="5" hspace="5" src="txtl_tutorial_02.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="tutorial_02.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% TXTL Tutorial
-% txtl_tutorial.m - basic usage of the TXTL modeling toolbox
+%% Your very first tutorial on the txtlsim toolbox
+% tutorial.m - basic usage of the TXTL modeling toolbox
 %
 % Vipul Singhal, 28 July 2017
 %
 % This file contains a simple tutorial of the TXTL modeling toolbox. You
-% will learn about setting up a negative autoregulation circuit, simulating it, 
-% plotting the results, creating variations of the circuit, and
-% understanding the object structure of the models. 
+% will learn about setting up a constitutive expression circuit, and a
+% negative autoregulation circuit. You will also learn the basics of
+% plotting the results, creating simple variations of a circuit, and of how
+% the model is structured. 
 
 %% Initializing the toolbox
+% Remember to set the working directory to the trunk directory of the
+% toolbox. The trunk directory is where folders like ``core'', and
+% ``components''live. Here is a snapshot of this directory on the author's
+% computer. 
+% 
+% <</Users/vipulsinghal/Dropbox/Documents/toolbox/txtlsim_buildacell/docs/trunk_dir.png>>
+% 
+% !TODO test this. does the image show up online? Probably not. 
+% 
 % Use this command to add the subdirectories needed to your matlab path. To
 % be run each time you begin a new TXTL toolbox session. 
 txtl_init;
@@ -220,7 +349,7 @@ txtl_init;
 % 
 % Set up the standard TXTL tubes
 % These load up the RNAP, Ribosome and degradation enzyme concentrations
-% ``E30VNPRL'' refers to a configuration file 
+% ``E2'' refers to a configuration file 
 tube1 = txtl_extract('E2');
 tube2 = txtl_buffer('E2');
 
@@ -246,13 +375,13 @@ toc
 t_ode = simData.Time;
 x_ode = simData.Data;
 
-%% plot the result
+%% Plot the result
 % The following function plots the proteins, RNA and resources in the
 % toolbox. In the next section we delve deeper into the object oriented
 % structure of the model, and how to plot arbitrary species in the model. 
 txtl_plot(simData,Mobj);
 
-%% Model Structure
+%% Model structure
 % The model is organized as a model object, with sub objects specifying
 % Parameters, Reactions, Species, etc. Type in 
 Mobj
@@ -263,11 +392,13 @@ Mobj
 Mobj.Species
 
 %%
-% Proteins, RNA and DNA generally follow the convention
-% protein CDS, RNA 5'UTRREPLACE_WITH_DASH_DASHCDS, DNA promoterREPLACE_WITH_DASH_DASH5' UTRREPLACE_WITH_DASH_DASHCDS, with
-% variations possible. There are also simply named `core' species like
-% RNAP, Ribo, RNase, etc. Finally we denote bound complexes with a colon,
-% for example, Species 1:Species 2. 
+% Proteins, RNA and DNA generally follow the naming convention
+% descirbed in the paper, with, for example, DNA specified with ``DNA
+% promoterREPLACE_WITH_DASH_DASH5' UTRREPLACE_WITH_DASH_DASHCDS''.
+%
+% There are also simply named `core' species like
+% RNAP, Ribo, RNase, etc. Finally we denote bind together speices into 
+% complexes with a colon, for example, Species 1:Species 2.  
 %% 
 % We also see that each of them has certain
 % other associated properties. You can explore further by accessing
@@ -291,21 +422,31 @@ set(Mobj.Species(1), 'InitialAmount', 50)
 %   help get
 %   help set
 
-
 %% 
 % You may read more about how model objects are arranged in Simbiology by
 % working through the
 % <https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html
 % Tutorial>. Feel free to browse the reactions and other subproperties by
-% individually typing in commands like 
-%%
-% 
-%   Mobj.reactions
-%   get(Mobj.Reactions)
-%   get(Mobj.Reactions(1))
-%   Mobj.Reactions(1).ReactionRate
-%   Mobj.Reactions(1).KineticLaw
-%   get(Mobj.Reactions(1).KineticLaw)
+% individually typing in commands shown below: 
+%% 
+% The reactions of the model object: 
+  Mobj.reactions
+%% 
+% The properties of the reactions that can be queried:
+  get(Mobj.Reactions)
+%% 
+% The properties of the first reaction:
+  get(Mobj.Reactions(1))
+%% 
+% The reaction rate of the first reaction:
+  Mobj.Reactions(1).ReactionRate
+%% 
+% The Kinetic law object used by the first reaction:
+  Mobj.Reactions(1).KineticLaw
+%% 
+% All the visible properties of the kinetic law object of the first
+% reaction:
+  get(Mobj.Reactions(1).KineticLaw)
 %%
 % and so on.
 %% Plotting individual species
@@ -313,13 +454,12 @@ set(Mobj.Species(1), 'InitialAmount', 50)
 % Use the function findspecies to get the index of the species object of interest. For
 % example, if you want to plot the trajectory of the dimerized tetR
 % protein, you could type in
-
 tetRindex = findspecies(Mobj, 'protein tetRdimer');
 figure
 plot(simData.Time/3600, simData.data(:,tetRindex));
 title('Dimerized tetR concentration')
-ylabel('concentration, AU')
-xlabel('time, AU')
+ylabel('concentration, nM')
+xlabel('time, h')
 curraxis = axis; 
 axis([curraxis(1:2) 0 curraxis(4)])
 

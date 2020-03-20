@@ -1,43 +1,71 @@
-%% TXTL Tutorial
-% txtl_tutorial.m - basic usage of the TXTL modeling toolbox
+%% Tutorial II
+% tutorial_ii.m - Slightly more involved set of examples involving txtlsim. We
+% recommend you read through the
+% <https://vipulsinghal02.github.io/txtlsim_buildacell/txtl_tutorial.html
+% first> tutorial
 %
-% Vipul Singhal, 28 July 2017
+% Vipul Singhal, 18 Mar 2020
 %
-% This file contains a simple tutorial of the TXTL modeling toolbox. You
-% will learn about setting up a negative autoregulation circuit, simulating it, 
-% plotting the results, creating variations of the circuit, and
-% understanding the object structure of the models. 
+% In this tutorial, we explore and demonstrate some of the finer points of
+% the txtlsim toolbox. 
+
+%% todos
+% 
+% 
+% # describe the IFFL circuit, along with 3OC12 and aTc addspecies. show a
+% few different variations of what happens when the concentrations of
+% things are changed. 
+% # add some meat to the reactions and species naming conventions. 
+% # show how to set the parameters in the config file
+% # show the constitutive expression promoter file, the repression promoter
+% and protein files, the activator and combinatorial promoter file, and
+% describe where to change things (including the CSV file) to get a new
+% part made. 
+% # show some variations: linear DNA, recBCD, gamS; clpX + lva tag
+% # show the intermediate species trajectories at different doses. this can
+% be done using the plotCustomSpecies2 function. 
+% # show the use of the globalize params, getparam, setparam methods. 
+% # 
+% 
 
 %% Initializing the toolbox
+% Remember to set the working directory to the trunk directory of the
+% toolbox. 
+% 
 % Use this command to add the subdirectories needed to your matlab path. To
 % be run each time you begin a new TXTL toolbox session. 
 txtl_init;
 
-%% Negative Autoregulation - A simple example
-% Here we demonstrate the setup of a genetic circuit where a transcription
-% factor represses its own expression. 
+%% IFFL example
+% The code below can be used to set up the constitutive GFP production
+% example. 
 % 
 % Set up the standard TXTL tubes
 % These load up the RNAP, Ribosome and degradation enzyme concentrations
-% ``E30VNPRL'' refers to a configuration file 
+% ``E2'' refers to a configuration file 
 tube1 = txtl_extract('E2');
 tube2 = txtl_buffer('E2');
 
 % Now set up a tube that will contain our DNA
-tube3 = txtl_newtube('gene_expression');
+tube3 = txtl_newtube('lastetIFFL');
+
 
 % Define the DNA strands, and all the relevant reactions
-txtl_add_dna(tube3, 'ptet(50)', 'utr1(20)', 'tetR(1200)', 1, 'plasmid');
-txtl_add_dna(tube3, 'ptet(50)', 'utr1(20)', 'deGFP(1000)', 1, 'plasmid');
+txtl_add_dna(tube3, ...
+  'plac(50)', 'utr1(20)', 'lasR(1000)', 5, 'plasmid');	
+txtl_add_dna(tube3, ...
+  'plas(50)', 'utr1(20)', 'tetR(1000)', 0.2, 'plasmid');	
+txtl_add_dna(tube3, ...
+  'plas_ptet(50)', 'utr1(20)', 'deGFP(1000)', 2, 'plasmid');	
+m = txtl_combine([tube1, tube2, tube3]);
+txtl_addspecies(m, 'OC12HSL', 1000);
+txtl_addspecies(m, 'aTc', 1000);
 
 % Mix the contents of the individual tubes
 Mobj = txtl_combine([tube1, tube2, tube3]);
 
 % Run a simulaton
-%   
-% At this point, the entire experiment is set up and loaded into 'Mobj'.
-% So now we just use standard Simbiology and MATLAB commands to run
-% and plot our results!
+% 
 
 tic
 [simData] = txtl_runsim(Mobj,14*60*60);
@@ -113,12 +141,12 @@ set(Mobj.Species(1), 'InitialAmount', 50)
 % example, if you want to plot the trajectory of the dimerized tetR
 % protein, you could type in
 
-tetRindex = findspecies(Mobj, 'protein tetRdimer');
+tetRindex = findspecies(Mobj, 'protein deGFP');
 figure
 plot(simData.Time/3600, simData.data(:,tetRindex));
-title('Dimerized tetR concentration')
-ylabel('concentration, AU')
-xlabel('time, AU')
+title('Un-matured protein concentration')
+ylabel('concentration, nM')
+xlabel('time, h')
 curraxis = axis; 
 axis([curraxis(1:2) 0 curraxis(4)])
 
