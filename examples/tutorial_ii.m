@@ -79,6 +79,8 @@ x_ode = simData.Data;
 % structure of the model, and how to plot arbitrary species in the model. 
 txtl_plot(simData,Mobj);
 
+%% Variations of the IFFL circuit
+% Here , we will 
 %% Model Structure
 % The model is organized as a model object, with sub objects specifying
 % Parameters, Reactions, Species, etc. Type in 
