@@ -106,27 +106,21 @@ set(Mobj.Species(1), 'InitialAmount', 50)
 % You may read more about how model objects are arranged in Simbiology by
 % working through the
 % <https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html
-% Tutorial>. Feel free to browse the reactions and other subproperties by
+% Tutorial>. Feel free to explore the reactions and other subproperties by
 % individually typing in commands shown below: 
 %% 
 % The reactions of the model object: 
   Mobj.reactions
 %% 
-% The properties of the reactions that can be queried:
+% The properties of the reactions that can be queried can be listed using
+% the command
   get(Mobj.Reactions)
 %% 
-% The properties of the first reaction:
+% The properties of the first reaction can be listed using
   get(Mobj.Reactions(1))
 %% 
-% The reaction rate of the first reaction:
+% and individual properties may be accessed using
   Mobj.Reactions(1).ReactionRate
-%% 
-% The Kinetic law object used by the first reaction:
-  Mobj.Reactions(1).KineticLaw
-%% 
-% All the visible properties of the kinetic law object of the first
-% reaction:
-  get(Mobj.Reactions(1).KineticLaw)
 %%
 % and so on.
 %% Plotting individual species
@@ -143,3 +137,55 @@ xlabel('time, h')
 curraxis = axis; 
 axis([curraxis(1:2) 0 curraxis(4)])
 
+%% Plotting multiple species
+% You can, of course, plot any subset of the species in the model, and
+% arrange them into a plot using MATLAB's subplot command. For example, say
+% we would like to explore the ribosome dynamics. Looking at the species
+% list above, we make a list of all the complexes with the ribosome species
+% in them. 
+
+riboList = {'RNAP', '', '', '', ''
+'RNAP:DNA ptet--utr1--tetR',...
+'AGTP:RNAP:DNA ptet--utr1--tetR',...
+'CUTP:RNAP:DNA ptet--utr1--tetR',...
+'CUTP:AGTP:RNAP:DNA ptet--utr1--tetR',...
+'term_RNAP:DNA ptet--utr1--tetR'
+'RNAP:DNA ptet--utr1--deGFP',...
+'AGTP:RNAP:DNA ptet--utr1--deGFP',...
+'CUTP:RNAP:DNA ptet--utr1--deGFP',...
+'CUTP:AGTP:RNAP:DNA ptet--utr1--deGFP',...
+'term_RNAP:DNA ptet--utr1--deGFP'};
+
+%%
+% We can plot the dynamics of these species as follows. 
+
+plotix = simData.Time/3600 < 2;
+timevec = simData.Time(simData.Time/3600 < 2)/3600;
+
+figure('Position', [50 50 1400 700])
+subplot(3, 5, [2 3 4])
+spIndex = findspecies(Mobj, riboList{1, 1});
+plot(timevec,...
+    simData.data(plotix,spIndex),...
+    'LineWidth', 2, 'LineStyle', ':');
+title('Free ribosome concentration')
+ylabel('concentration, nM')
+xlabel('time, h')
+hold on
+
+for i = 6:15
+    subplot(3, 5, i)
+    rowix = 1+floor((i-1)/5);
+    colix = mod(i, 5);
+    if colix == 0
+        colix = 5;
+    end
+    spIndex = findspecies(Mobj, riboList{rowix, colix});
+    plot(timevec,...
+    simData.data(plotix,spIndex),...
+    'LineWidth', 2, 'LineStyle', ':');
+    legend(riboList{rowix, colix})
+    ylabel('concentration, nM')
+    xlabel('time, h')
+    
+end
