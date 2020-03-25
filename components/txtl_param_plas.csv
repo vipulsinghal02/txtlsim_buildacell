@@ -1,13 +1,13 @@
-RNAPbound_Forward, Expression, 0.001, estimate 
-RNAPbound_Reverse, Expression, 10, estimate
+RNAPbound_Forward, Expression, 1, TXTL_PLAS_RNAPbound_F
+RNAPbound_Reverse, Expression, 1.0686e+13, TXTL_PLAS_RNAPbound_R
 
-RNAPbound_Forward_actv, Expression, 20, estimate 
-RNAPbound_Reverse_actv, Expression, 400, estimate
+RNAPbound_Forward_actv, Expression, 1, TXTL_PLAS_TFRNAPbound_F
+RNAPbound_Reverse_actv, Expression, 2981, TXTL_PLAS_TFRNAPbound_R
 
 Promoter_Length, Numeric, 100
 Thio_Length, Numeric, 500
 Junk_Length, Numeric, 0
 
-activation_F, Numeric, 1
-activation_R, Numeric, 0.02
+activation_F, Numeric, 1, TXTL_PLAS_TFBIND_F
+activation_R, Numeric, 148.41, TXTL_PLAS_TFBIND_R
 
