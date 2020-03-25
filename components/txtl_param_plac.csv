@@ -1,5 +1,5 @@
-RNAPbound_Forward, Expression, 20, 
-RNAPbound_Reverse, Expression, 400, 
+RNAPbound_Forward, Expression, 4.4817, 
+RNAPbound_Reverse, Expression,  1.6276e+05, 
 
 Promoter_Length, Numeric, 50
 Thio_Length, Numeric, 500

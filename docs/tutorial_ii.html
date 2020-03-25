@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Tutorial II</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-03-19"><meta name="DC.source" content="tutorial_ii.m"><style type="text/css">
+      --><title>Tutorial II</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-03-22"><meta name="DC.source" content="tutorial_ii.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,9 +66,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Tutorial II</h1><!--introduction--><p>tutorial_ii.m - Slightly more involved set of examples involving txtlsim. We recommend you read through the <a href="https://vipulsinghal02.github.io/txtlsim_buildacell/txtl_tutorial.html">first</a> tutorial</p><p>Vipul Singhal, 18 Mar 2020</p><p>In this tutorial, we explore and demonstrate some of the finer points of the txtlsim toolbox.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">todos</a></li><li><a href="#2">Initializing the toolbox</a></li><li><a href="#3">IFFL example</a></li><li><a href="#4">plot the result</a></li><li><a href="#5">Model Structure</a></li><li><a href="#16">Plotting individual species</a></li></ul></div><h2 id="1">todos</h2><div><ol><li>describe the IFFL circuit, along with 3OC12 and aTc addspecies. show a few different variations of what happens when the concentrations of things are changed.</li><li>add some meat to the reactions and species naming conventions.</li><li>show how to set the parameters in the config file</li><li>show the constitutive expression promoter file, the repression promoter and protein files, the activator and combinatorial promoter file, and describe where to change things (including the CSV file) to get a new part made.</li><li>show some variations: linear DNA, recBCD, gamS; clpX + lva tag</li><li>show the intermediate species trajectories at different doses. this can be done using the plotCustomSpecies2 function.</li><li>show the use of the globalize params, getparam, setparam methods. #</li></ol></div><h2 id="2">Initializing the toolbox</h2><p>Remember to set the working directory to the trunk directory of the toolbox.</p><p>Use this command to add the subdirectories needed to your matlab path. To be run each time you begin a new TXTL toolbox session.</p><pre class="codeinput">txtl_init;
-</pre><h2 id="3">IFFL example</h2><p>The code below can be used to set up the constitutive GFP production example.</p><p>Set up the standard TXTL tubes These load up the RNAP, Ribosome and degradation enzyme concentrations ``E2'' refers to a configuration file</p><pre class="codeinput">tube1 = txtl_extract(<span class="string">'E2'</span>);
-tube2 = txtl_buffer(<span class="string">'E2'</span>);
+  </style></head><body><div class="content"><h1>Tutorial II</h1><!--introduction--><p>tutorial_ii.m - Slightly more involved set of examples involving txtlsim. We recommend you read through the <a href="https://vipulsinghal02.github.io/txtlsim_buildacell/tutorial.html">first</a> tutorial.</p><p>Vipul Singhal, 18 Mar 2018</p><p>In this tutorial, we explore and demonstrate some of the finer points of the txtlsim toolbox.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Initializing the toolbox</a></li><li><a href="#2">IFFL example</a></li><li><a href="#3">Plot the result</a></li><li><a href="#4">Model Structure</a></li><li><a href="#6">The effect of varying aTc</a></li></ul></div><h2 id="1">Initializing the toolbox</h2><p>Remember to set the working directory to the trunk directory of the toolbox.</p><p>Use this command to add the subdirectories needed to your matlab path. To be run each time you begin a new TXTL toolbox session.</p><pre class="codeinput">txtl_init;
+</pre><h2 id="2">IFFL example</h2><p>The code below can be used to set up an IFFL example with lasR as the activator, tetR as the repressor, and deGFP as the reporter.</p><p>Set up the standard TXTL tubes These load up the RNAP, Ribosome and degradation enzyme concentrations ``E2'' refers to a configuration file</p><pre class="codeinput">tube1 = txtl_extract(<span class="string">'E3'</span>);
+tube2 = txtl_buffer(<span class="string">'E3'</span>);
 
 <span class="comment">% Now set up a tube that will contain our DNA</span>
 tube3 = txtl_newtube(<span class="string">'lastetIFFL'</span>);
@@ -76,32 +76,30 @@ tube3 = txtl_newtube(<span class="string">'lastetIFFL'</span>);
 
 <span class="comment">% Define the DNA strands, and all the relevant reactions</span>
 txtl_add_dna(tube3, <span class="keyword">...</span>
-  <span class="string">'plac(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'lasR(1000)'</span>, 5, <span class="string">'plasmid'</span>);
+  <span class="string">'plac(50)'</span>, <span class="string">'utr1b(20)'</span>, <span class="string">'lasR(1000)'</span>, 1, <span class="string">'plasmid'</span>);
 txtl_add_dna(tube3, <span class="keyword">...</span>
-  <span class="string">'plas(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'tetR(1000)'</span>, 0.2, <span class="string">'plasmid'</span>);
+  <span class="string">'plas(50)'</span>, <span class="string">'utr1b(20)'</span>, <span class="string">'tetR(1000)'</span>, 0.1, <span class="string">'plasmid'</span>);
 txtl_add_dna(tube3, <span class="keyword">...</span>
-  <span class="string">'plas_ptet(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'deGFP(1000)'</span>, 2, <span class="string">'plasmid'</span>);
-m = txtl_combine([tube1, tube2, tube3]);
-txtl_addspecies(m, <span class="string">'OC12HSL'</span>, 1000);
-txtl_addspecies(m, <span class="string">'aTc'</span>, 1000);
+  <span class="string">'plas_ptet(50)'</span>, <span class="string">'utr1b(20)'</span>, <span class="string">'deGFP(1000)'</span>, 1, <span class="string">'plasmid'</span>);
 
 <span class="comment">% Mix the contents of the individual tubes</span>
 Mobj = txtl_combine([tube1, tube2, tube3]);
 
-<span class="comment">% Run a simulaton</span>
-<span class="comment">%</span>
+txtl_addspecies(Mobj, <span class="string">'OC12HSL'</span>, 1000);
+txtl_addspecies(Mobj, <span class="string">'aTc'</span>, 100);
 
+<span class="comment">% Run a simulaton</span>
 tic
 [simData] = txtl_runsim(Mobj,14*60*60);
 toc
 t_ode = simData.Time;
 x_ode = simData.Data;
-</pre><pre class="codeoutput">Elapsed time is 0.804191 seconds.
-</pre><h2 id="4">plot the result</h2><p>The following function plots the proteins, RNA and resources in the toolbox. In the next section we delve deeper into the object oriented structure of the model, and how to plot arbitrary species in the model.</p><pre class="codeinput">txtl_plot(simData,Mobj);
+</pre><pre class="codeoutput">Elapsed time is 0.911503 seconds.
+</pre><h2 id="3">Plot the result</h2><p>The following function plots the proteins, RNA and resources in the toolbox. In the next section we delve deeper into the object oriented structure of the model, and how to plot arbitrary species in the model.</p><pre class="codeinput">txtl_plot(simData,Mobj);
 </pre><pre class="codeoutput">Current plot held
-</pre><img vspace="5" hspace="5" src="tutorial_ii_01.png" alt=""> <h2 id="5">Model Structure</h2><p>The model is organized as a model object, with sub objects specifying Parameters, Reactions, Species, etc. Type in</p><pre class="codeinput">Mobj
+</pre><img vspace="5" hspace="5" src="tutorial_ii_01.png" alt=""> <h2 id="4">Model Structure</h2><p>The model is organized as a model object, with sub objects specifying Parameters, Reactions, Species, etc. Type in</p><pre class="codeinput">Mobj
 </pre><pre class="codeoutput">
-   SimBiology Model - mix_of_E2_E2_lastetIFFL 
+   SimBiology Model - mix_of_E3_E3_lastetIFFL 
 
    Model Components:
      Compartments:      1
@@ -111,160 +109,59 @@ x_ode = simData.Data;
      Rules:             12
      Species:           80
 
-</pre><p>We can see the number of instances of the various subclasses of the model object. We can explore further by typing</p><pre class="codeinput">Mobj.Species
+</pre><p>and the individual properties of the model object may be explored by typing, for example,</p><pre class="codeinput">Mobj.Events
 </pre><pre class="codeoutput">
-   SimBiology Species Array
+   SimBiology Event Array
 
-   Index:    Compartment:    Name:                                                                     InitialAmount:    InitialAmountUnits:
-   1         contents        RNAP                                                                      4.7367            
-   2         contents        Ribo                                                                      266.42            
-   3         contents        RecBCD                                                                    5                 
-   4         contents        RNase                                                                     30269             
-   5         contents        AGTP                                                                      3.18005e+06       
-   6         contents        CUTP                                                                      1.90803e+06       
-   7         contents        AA                                                                        3.18005e+07       
-   8         contents        protein lasR                                                              0                 
-   9         contents        OC12HSL:protein lasR                                                      0                 
-   10        contents        RNA utr1--lasR                                                            0                 
-   11        contents        Ribo:RNA utr1--lasR                                                       0                 
-   12        contents        DNA plac--utr1--lasR                                                      5                 
-   13        contents        RNAP:DNA plac--utr1--lasR                                                 0                 
-   14        contents        CUTP:AGTP:RNAP:DNA plac--utr1--lasR                                       0                 
-   15        contents        term_RNAP:DNA plac--utr1--lasR                                            0                 
-   16        contents        AA:AGTP:Ribo:RNA utr1--lasR                                               0                 
-   17        contents        term_Ribo:RNA utr1--lasR                                                  0                 
-   18        contents        protein tetR                                                              0                 
-   19        contents        aTc                                                                       0                 
-   20        contents        protein tetRdimer                                                         0                 
-   21        contents        RNA utr1--tetR                                                            0                 
-   22        contents        Ribo:RNA utr1--tetR                                                       0                 
-   23        contents        DNA plas--utr1--tetR                                                      0.2               
-   24        contents        RNAP:DNA plas--utr1--tetR                                                 0                 
-   25        contents        AA:AGTP:Ribo:RNA utr1--tetR                                               0                 
-   26        contents        term_Ribo:RNA utr1--tetR                                                  0                 
-   27        contents        protein deGFP                                                             0                 
-   28        contents        protein deGFP*                                                            0                 
-   29        contents        RNA utr1--deGFP                                                           0                 
-   30        contents        Ribo:RNA utr1--deGFP                                                      0                 
-   31        contents        DNA plas_ptet--utr1--deGFP                                                2                 
-   32        contents        RNAP:DNA plas_ptet--utr1--deGFP                                           0                 
-   33        contents        AA:AGTP:Ribo:RNA utr1--deGFP                                              0                 
-   34        contents        term_Ribo:RNA utr1--deGFP                                                 0                 
-   35        contents        OC12HSL                                                                   0                 
-   36        contents        AGTP:RNAP:DNA plac--utr1--lasR                                            0                 
-   37        contents        CUTP:RNAP:DNA plac--utr1--lasR                                            0                 
-   38        contents        AA:Ribo:RNA utr1--lasR                                                    0                 
-   39        contents        RNA utr1--lasR:RNase                                                      0                 
-   40        contents        Ribo:RNA utr1--lasR:RNase                                                 0                 
-   41        contents        AA:AGTP:Ribo:RNA utr1--lasR:RNase                                         0                 
-   42        contents        term_Ribo:RNA utr1--lasR:RNase                                            0                 
-   43        contents        AA:Ribo:RNA utr1--lasR:RNase                                              0                 
-   44        contents        2 aTc:protein tetRdimer                                                   0                 
-   45        contents        DNA plas--utr1--tetR:OC12HSL:protein lasR                                 0                 
-   46        contents        RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR                            0                 
-   47        contents        CUTP:AGTP:RNAP:DNA plas--utr1--tetR                                       0                 
-   48        contents        term_RNAP:DNA plas--utr1--tetR                                            0                 
-   49        contents        CUTP:AGTP:RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR                  0                 
-   50        contents        term_RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR                       0                 
-   51        contents        AGTP:RNAP:DNA plas--utr1--tetR                                            0                 
-   52        contents        CUTP:RNAP:DNA plas--utr1--tetR                                            0                 
-   53        contents        AGTP:RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR                       0                 
-   54        contents        CUTP:RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR                       0                 
-   55        contents        AA:Ribo:RNA utr1--tetR                                                    0                 
-   56        contents        RNA utr1--tetR:RNase                                                      0                 
-   57        contents        Ribo:RNA utr1--tetR:RNase                                                 0                 
-   58        contents        AA:AGTP:Ribo:RNA utr1--tetR:RNase                                         0                 
-   59        contents        term_Ribo:RNA utr1--tetR:RNase                                            0                 
-   60        contents        AA:Ribo:RNA utr1--tetR:RNase                                              0                 
-   61        contents        DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR                           0                 
-   62        contents        RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR                      0                 
-   63        contents        CUTP:AGTP:RNAP:DNA plas_ptet--utr1--deGFP                                 0                 
-   64        contents        term_RNAP:DNA plas_ptet--utr1--deGFP                                      0                 
-   65        contents        CUTP:AGTP:RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR            0                 
-   66        contents        term_RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR                 0                 
-   67        contents        AGTP:RNAP:DNA plas_ptet--utr1--deGFP                                      0                 
-   68        contents        CUTP:RNAP:DNA plas_ptet--utr1--deGFP                                      0                 
-   69        contents        AGTP:RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR                 0                 
-   70        contents        CUTP:RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR                 0                 
-   71        contents        DNA plas_ptet--utr1--deGFP:protein tetRdimer                              0                 
-   72        contents        DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR:protein tetRdimer         0                 
-   73        contents        RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR:protein tetRdimer    0                 
-   74        contents        AA:Ribo:RNA utr1--deGFP                                                   0                 
-   75        contents        RNA utr1--deGFP:RNase                                                     0                 
-   76        contents        Ribo:RNA utr1--deGFP:RNase                                                0                 
-   77        contents        AA:AGTP:Ribo:RNA utr1--deGFP:RNase                                        0                 
-   78        contents        term_Ribo:RNA utr1--deGFP:RNase                                           0                 
-   79        contents        AA:Ribo:RNA utr1--deGFP:RNase                                             0                 
-   80        contents        AGTP_USED                                                                 0                 
+   Index:    Trigger:                EventFcns:
+   1         time &lt;= AGTPdeg_time    AGTPdeg_F = 0
+   2         time &gt; AGTPdeg_time     AGTPdeg_F = AGTPdeg_rate
 
-</pre><p>Proteins, RNA and DNA generally follow the convention protein CDS, RNA 5'UTR--CDS, DNA promoter--5' UTR--CDS, with variations possible. There are also simply named `core' species like RNAP, Ribo, RNase, etc. Finally we denote bound complexes with a colon, for example, Species 1:Species 2.</p><p>We also see that each of them has certain other associated properties. You can explore further by accessing individual species using their index, and using the `get' and `set' commands to get and set the properties of the species. For example, try typing</p><pre class="codeinput">Mobj.Species(1)
-</pre><pre class="codeoutput">
-   SimBiology Species Array
+</pre><h2 id="6">The effect of varying aTc</h2><p>we will vary the aTc inducer in the IFFL circuit, and plot the results of these variations. We will use MATLAB cell arrays to store the variations of the models.</p><pre class="codeinput">close <span class="string">all</span>
+initATC = [1 10 100 1000];
+m = cell(length(initATC), 1);
+simData = cell(length(initATC), 1);
+t_ode = cell(length(initATC), 1);
+x_ode = cell(length(initATC), 1);
 
-   Index:    Compartment:    Name:    InitialAmount:    InitialAmountUnits:
-   1         contents        RNAP     4.7367            
+tube1 = txtl_extract(<span class="string">'E3'</span>);
+tube2 = txtl_buffer(<span class="string">'E3'</span>);
+<span class="keyword">for</span> i = 1:length(initATC)
+    tube3 = txtl_newtube(<span class="string">'lastetIFFL'</span>);
+    txtl_add_dna(tube3, <span class="keyword">...</span>
+      <span class="string">'plac(50)'</span>, <span class="string">'utr1b(20)'</span>, <span class="string">'lasR(1000)'</span>, 1, <span class="string">'plasmid'</span>);
+    txtl_add_dna(tube3, <span class="keyword">...</span>
+      <span class="string">'plas(50)'</span>, <span class="string">'utr1b(20)'</span>, <span class="string">'tetR(1000)'</span>, 0.1, <span class="string">'plasmid'</span>);
+    txtl_add_dna(tube3, <span class="keyword">...</span>
+      <span class="string">'plas_ptet(50)'</span>, <span class="string">'utr1b(20)'</span>, <span class="string">'deGFP(1000)'</span>, 1, <span class="string">'plasmid'</span>);
+    m{i} = txtl_combine([tube1, tube2, tube3]);
+    txtl_addspecies(m{i}, <span class="string">'OC12HSL'</span>, 1000);
+    txtl_addspecies(m{i}, <span class="string">'aTc'</span>, initATC(i));
+    [simData{i}] = txtl_runsim(m{i},6*60*60);
+    t_ode{i} = simData{i}.Time;
+    x_ode{i} = simData{i}.Data;
+<span class="keyword">end</span>
 
-</pre><p>This gives you the first species in the model. You can find out what properties as associated with this species by typing in</p><pre class="codeinput">get(Mobj.Species(1))
-</pre><pre class="codeoutput">            Annotation: ''
-     BoundaryCondition: 0
-        ConstantAmount: 0
-         InitialAmount: 4.7367
-    InitialAmountUnits: ''
-                  Name: 'RNAP'
-                 Notes: ''
-                Parent: [1&times;1 SimBiology.Compartment]
-                   Tag: ''
-                  Type: 'species'
-              UserData: []
 
-</pre><p>and then using the set command to set its initial concentration to 50 units:</p><pre class="codeinput">set(Mobj.Species(1), <span class="string">'InitialAmount'</span>, 50)
-</pre><p>Learn more about the get and set commands by typing in</p><pre class="language-matlab">help <span class="string">get</span>
-help <span class="string">set</span>
-</pre><p>You may read more about how model objects are arranged in Simbiology by working through the <a href="https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html">Tutorial</a>. Feel free to browse the reactions and other subproperties by individually typing in commands like</p><pre class="language-matlab">Mobj.reactions
-get(Mobj.Reactions)
-get(Mobj.Reactions(1))
-Mobj.Reactions(1).ReactionRate
-Mobj.Reactions(1).KineticLaw
-get(Mobj.Reactions(1).KineticLaw)
-</pre><p>and so on.</p><h2 id="16">Plotting individual species</h2><p>You can also plot the trajectories of any of the species in the model. Use the function findspecies to get the index of the species object of interest. For example, if you want to plot the trajectory of the dimerized tetR protein, you could type in</p><pre class="codeinput">tetRindex = findspecies(Mobj, <span class="string">'protein deGFP'</span>);
-figure
-plot(simData.Time/3600, simData.data(:,tetRindex));
-title(<span class="string">'Un-matured protein concentration'</span>)
-ylabel(<span class="string">'concentration, nM'</span>)
-xlabel(<span class="string">'time, h'</span>)
-curraxis = axis;
-axis([curraxis(1:2) 0 curraxis(4)])
+speciesList = {<span class="string">'aTc'</span>
+<span class="string">'protein tetRdimer'</span>
+<span class="string">'RNA utr1b--deGFP'</span>
+<span class="string">'protein deGFP*'</span>};
+
+plotCustomSpecies2(m, x_ode,t_ode, speciesList, {<span class="string">'1nM'</span>, <span class="string">'10nM'</span>, <span class="string">'100nM'</span>, <span class="string">'1000nM'</span>})
 </pre><img vspace="5" hspace="5" src="tutorial_ii_02.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Tutorial II
 % tutorial_ii.m - Slightly more involved set of examples involving txtlsim. We
 % recommend you read through the
-% <https://vipulsinghal02.github.io/txtlsim_buildacell/txtl_tutorial.html
-% first> tutorial
+% <https://vipulsinghal02.github.io/txtlsim_buildacell/tutorial.html
+% first> tutorial. 
 %
-% Vipul Singhal, 18 Mar 2020
+% Vipul Singhal, 18 Mar 2018
 %
 % In this tutorial, we explore and demonstrate some of the finer points of
 % the txtlsim toolbox. 
 
-%% todos
-% 
-% 
-% # describe the IFFL circuit, along with 3OC12 and aTc addspecies. show a
-% few different variations of what happens when the concentrations of
-% things are changed. 
-% # add some meat to the reactions and species naming conventions. 
-% # show how to set the parameters in the config file
-% # show the constitutive expression promoter file, the repression promoter
-% and protein files, the activator and combinatorial promoter file, and
-% describe where to change things (including the CSV file) to get a new
-% part made. 
-% # show some variations: linear DNA, recBCD, gamS; clpX + lva tag
-% # show the intermediate species trajectories at different doses. this can
-% be done using the plotCustomSpecies2 function. 
-% # show the use of the globalize params, getparam, setparam methods. 
-% # 
-% 
 
 %% Initializing the toolbox
 % Remember to set the working directory to the trunk directory of the
@@ -275,14 +172,14 @@ axis([curraxis(1:2) 0 curraxis(4)])
 txtl_init;
 
 %% IFFL example
-% The code below can be used to set up the constitutive GFP production
-% example. 
+% The code below can be used to set up an IFFL example with lasR as the
+% activator, tetR as the repressor, and deGFP as the reporter. 
 % 
 % Set up the standard TXTL tubes
 % These load up the RNAP, Ribosome and degradation enzyme concentrations
 % ``E2'' refers to a configuration file 
-tube1 = txtl_extract('E2');
-tube2 = txtl_buffer('E2');
+tube1 = txtl_extract('E3');
+tube2 = txtl_buffer('E3');
 
 % Now set up a tube that will contain our DNA
 tube3 = txtl_newtube('lastetIFFL');
@@ -290,28 +187,26 @@ tube3 = txtl_newtube('lastetIFFL');
 
 % Define the DNA strands, and all the relevant reactions
 txtl_add_dna(tube3, ...
-  'plac(50)', 'utr1(20)', 'lasR(1000)', 5, 'plasmid');	
+  'plac(50)', 'utr1b(20)', 'lasR(1000)', 1, 'plasmid');	
 txtl_add_dna(tube3, ...
-  'plas(50)', 'utr1(20)', 'tetR(1000)', 0.2, 'plasmid');	
+  'plas(50)', 'utr1b(20)', 'tetR(1000)', 0.1, 'plasmid');	
 txtl_add_dna(tube3, ...
-  'plas_ptet(50)', 'utr1(20)', 'deGFP(1000)', 2, 'plasmid');	
-m = txtl_combine([tube1, tube2, tube3]);
-txtl_addspecies(m, 'OC12HSL', 1000);
-txtl_addspecies(m, 'aTc', 1000);
+  'plas_ptet(50)', 'utr1b(20)', 'deGFP(1000)', 1, 'plasmid');	
 
 % Mix the contents of the individual tubes
 Mobj = txtl_combine([tube1, tube2, tube3]);
 
-% Run a simulaton
-% 
+txtl_addspecies(Mobj, 'OC12HSL', 1000);
+txtl_addspecies(Mobj, 'aTc', 100);
 
+% Run a simulaton
 tic
 [simData] = txtl_runsim(Mobj,14*60*60);
 toc
 t_ode = simData.Time;
 x_ode = simData.Data;
 
-%% plot the result
+%% Plot the result
 % The following function plots the proteins, RNA and resources in the
 % toolbox. In the next section we delve deeper into the object oriented
 % structure of the model, and how to plot arbitrary species in the model. 
@@ -322,72 +217,48 @@ txtl_plot(simData,Mobj);
 % Parameters, Reactions, Species, etc. Type in 
 Mobj
 
-%%
-% We can see the number of instances of the various subclasses of the 
-% model object. We can explore further by typing 
-Mobj.Species
-
-%%
-% Proteins, RNA and DNA generally follow the convention
-% protein CDS, RNA 5'UTRREPLACE_WITH_DASH_DASHCDS, DNA promoterREPLACE_WITH_DASH_DASH5' UTRREPLACE_WITH_DASH_DASHCDS, with
-% variations possible. There are also simply named `core' species like
-% RNAP, Ribo, RNase, etc. Finally we denote bound complexes with a colon,
-% for example, Species 1:Species 2. 
 %% 
-% We also see that each of them has certain
-% other associated properties. You can explore further by accessing
-% individual species using their index, and using the `get' and `set' commands
-% to get and set the properties of the species. For example, try typing 
-Mobj.Species(1)
-
-%% 
-% This gives you the first species in the model. You can find out what
-% properties as associated with this species by typing in 
-get(Mobj.Species(1))
-
-%%
-% and then using the set command to set its initial concentration to 50
-% units:
-set(Mobj.Species(1), 'InitialAmount', 50)
-
-%%
-% Learn more about the get and set commands by typing in 
-%%
-%   help get
-%   help set
+% and the individual properties of the model object may be explored by
+% typing, for example, 
+Mobj.Events
 
 
-%% 
-% You may read more about how model objects are arranged in Simbiology by
-% working through the
-% <https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html
-% Tutorial>. Feel free to browse the reactions and other subproperties by
-% individually typing in commands like 
-%%
-% 
-%   Mobj.reactions
-%   get(Mobj.Reactions)
-%   get(Mobj.Reactions(1))
-%   Mobj.Reactions(1).ReactionRate
-%   Mobj.Reactions(1).KineticLaw
-%   get(Mobj.Reactions(1).KineticLaw)
-%%
-% and so on.
-%% Plotting individual species
-% You can also plot the trajectories of any of the species in the model.
-% Use the function findspecies to get the index of the species object of interest. For
-% example, if you want to plot the trajectory of the dimerized tetR
-% protein, you could type in
+%% The effect of varying aTc
+% we will vary the aTc inducer in the IFFL circuit, and plot the
+% results of these variations. We will use MATLAB cell arrays to store the
+% variations of the models. 
+close all
+initATC = [1 10 100 1000];
+m = cell(length(initATC), 1);
+simData = cell(length(initATC), 1);
+t_ode = cell(length(initATC), 1);
+x_ode = cell(length(initATC), 1);
 
-tetRindex = findspecies(Mobj, 'protein deGFP');
-figure
-plot(simData.Time/3600, simData.data(:,tetRindex));
-title('Un-matured protein concentration')
-ylabel('concentration, nM')
-xlabel('time, h')
-curraxis = axis; 
-axis([curraxis(1:2) 0 curraxis(4)])
+tube1 = txtl_extract('E3');
+tube2 = txtl_buffer('E3');
+for i = 1:length(initATC)
+    tube3 = txtl_newtube('lastetIFFL');
+    txtl_add_dna(tube3, ...
+      'plac(50)', 'utr1b(20)', 'lasR(1000)', 1, 'plasmid');	
+    txtl_add_dna(tube3, ...
+      'plas(50)', 'utr1b(20)', 'tetR(1000)', 0.1, 'plasmid');	
+    txtl_add_dna(tube3, ...
+      'plas_ptet(50)', 'utr1b(20)', 'deGFP(1000)', 1, 'plasmid');	
+    m{i} = txtl_combine([tube1, tube2, tube3]);
+    txtl_addspecies(m{i}, 'OC12HSL', 1000);
+    txtl_addspecies(m{i}, 'aTc', initATC(i));
+    [simData{i}] = txtl_runsim(m{i},6*60*60);
+    t_ode{i} = simData{i}.Time;
+    x_ode{i} = simData{i}.Data;
+end
 
+
+speciesList = {'aTc'
+'protein tetRdimer' 
+'RNA utr1bREPLACE_WITH_DASH_DASHdeGFP'
+'protein deGFP*'};
+
+plotCustomSpecies2(m, x_ode,t_ode, speciesList, {'1nM', '10nM', '100nM', '1000nM'})
 
 ##### SOURCE END #####
 --></body></html>

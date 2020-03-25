@@ -41,8 +41,8 @@ txtl_init;
 % Set up the standard TXTL tubes
 % These load up the RNAP, Ribosome and degradation enzyme concentrations
 % ``E2'' refers to a configuration file 
-tube1 = txtl_extract('E2');
-tube2 = txtl_buffer('E2');
+tube1 = txtl_extract('E3');
+tube2 = txtl_buffer('E3');
 
 % Now set up a tube that will contain our DNA
 tube3 = txtl_newtube('lastetIFFL');

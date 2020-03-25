@@ -48,14 +48,6 @@ gfpinfo = ['This is the pLas-tetO-deGFP DNA perturbation in the IFFL. \n '];
 
 
 
-
-
-
-
-
-
-
-
 % ordering requirements:
 % ensure that the following two orderings match up:
 % activeNames(orderingIX) == masterVector(paramMaps(orderingIX))
@@ -447,14 +439,17 @@ model_info = struct(...
     'circuitInfo',{oc12info, lasrinfo, atcinfo, tetrinfo, gfpinfo},...
     'modelObj', {mIFFL1, mIFFL2, mIFFL3, mIFFL4, mIFFL5},... % array of model objects (different topologies)
     'modelName',  {mIFFL1.name, mIFFL2.name, mIFFL3.name, mIFFL4.name, mIFFL5.name},...; % model names.
-    'namesUnord', {activeNames(paramMap,1),activeNames(paramMap,1),activeNames(paramMap,1),activeNames(paramMap,1), activeNames(paramMap,1)},... % names of parameters per model, unordered.
-    'paramMaps', {paramMap, paramMap, paramMap, paramMap, paramMap}, ... % paramMap is a matrix mapping master vector elements to namesUnord
-    'dosedNames', {dosedNames, dosedNames, dosedNames, dosedNames, dosedNames},... % cell arrays of species. cell array corresponds
-    ...                               % to a model.
+    'namesUnord', {activeNames(paramMap,1),activeNames(paramMap,1),activeNames(paramMap,1),activeNames(paramMap,1),...
+    activeNames(paramMap,1)},... % names of parameters per model, unordered.
+    'paramMaps', {paramMap, paramMap, paramMap, paramMap, paramMap}, ... 
+    ...         % paramMap is a matrix mapping master vector elements to namesUnord
+    'dosedNames', {dosedNames, dosedNames, dosedNames, dosedNames, dosedNames},... 
+    ...         % cell arrays of species. cell array corresponds to a model.
     'dosedVals', {dosedVals1, dosedVals2, dosedVals3, dosedVals4, dosedVals5},...  % matrices of dose vals
     'doseWeighting', {doseWeights1, doseWeights2, doseWeights3, doseWeights4, doseWeights5}, ...
     ... % OPTIONAL FIELD. reweight the importance of the curves corresponding to the different doses.
-    'measuredSpecies', {measuredSpecies, measuredSpecies, measuredSpecies , measuredSpecies, measuredSpecies}, ... % cell array of cell arrays of
+    'measuredSpecies', {measuredSpecies, measuredSpecies, measuredSpecies , measuredSpecies, measuredSpecies}, ... 
+    ...                  % cell array of cell arrays of
     ...                  % species names. the elements of the inner
     ...                  % cell array get summed.
     'measuredSpeciesIndex', {msIx, msIx,msIx, msIx, msIx},...  % maps measuredSpecies to the species in data array
@@ -478,10 +473,10 @@ master_info = struct(...
     'paramRanges', {paramRanges},... %
     'fixedParams', {fixedParamsIX},...   % indexes of the fixed params (withing master vector)
     'semanticGroups', {semanticGroups}); % EITHER EMPTY OR
-% a cell array of vectors specifying parameter
+% semanticGroups is a cell array of vectors specifying parameter
 % groupings.
 % The vectors contain indices to the
-% parameters in (non fixed subset of) the master
+% parameters in the non fixed subset of the master
 % vector that need to be grouped.
 % I.e., They contain indexes of the subvector
 % logp =
