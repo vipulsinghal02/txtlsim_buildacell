@@ -33,7 +33,7 @@ function txtl_mrna_degradation(mode, tube, dna, rna, rbs_spec)
         complexF = degRate/10;
         complexR = degRate/40;
     end
-    length_over_2 = round(rna.UserData/2);
+    length_over_4 = round(rna.UserData/4);
     % Setup RNA degradation reactions, by searching for strings with rna in
     % them, and then degrading those strings. 
     listOfSpecies = get(tube.species, 'name');
@@ -68,7 +68,7 @@ function txtl_mrna_degradation(mode, tube, dna, rna, rbs_spec)
         if isfield(tube.UserData, 'energymode') && strcmp(tube.UserData.energymode, 'regeneration')
            
                 txtl_addreaction(tube,[RNAcomplexes{i} ':RNase -> RNase + '...
-                    num2str(length_over_2) ' AGMP + ' num2str(length_over_2) ' CUMP '...
+                    num2str(length_over_4) ' AGMP + ' num2str(length_over_4) ' CUMP '...
                     productspecies],...
                     'MassAction',{'TXTL_RNAdeg_kc',degRate});
             

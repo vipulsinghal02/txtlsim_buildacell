@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Tutorial III</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-03-19"><meta name="DC.source" content="tutorial_iii.m"><style type="text/css">
+      --><title>Tutorial III: Model details: Events, parameter scope and rules.</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-04-19"><meta name="DC.source" content="tutorial_iii.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,326 +66,222 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Tutorial III</h1><!--introduction--><p>tutorial_iii.m - Incoherent feedforward loop example. We recommend you read through tutorials i and ii before trying this one out. All the tutorials can be found on the index page, <a href="https://vipulsinghal02.github.io/txtlsim_buildacell/">here</a>.</p><p>Vipul Singhal</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">todos</a></li><li><a href="#2">Initializing the toolbox</a></li><li><a href="#3">IFFL example</a></li><li><a href="#4">plot the result</a></li><li><a href="#5">Model Structure</a></li><li><a href="#16">Plotting individual species</a></li></ul></div><h2 id="1">todos</h2><div><ol><li>describe the IFFL circuit, along with 3OC12 and aTc addspecies. show a few different variations of what happens when the concentrations of things are changed.</li><li>add some meat to the reactions and species naming conventions.</li><li>show how to set the parameters in the config file</li><li>show the constitutive expression promoter file, the repression promoter and protein files, the activator and combinatorial promoter file, and describe where to change things (including the CSV file) to get a new part made.</li><li>show some variations: linear DNA, recBCD, gamS; clpX + lva tag</li><li>show the intermediate species trajectories at different doses. this can be done using the plotCustomSpecies2 function.</li><li>show the use of the globalize params, getparam, setparam methods. #</li></ol></div><h2 id="2">Initializing the toolbox</h2><p>Remember to set the working directory to the trunk directory of the toolbox.</p><p>Use this command to add the subdirectories needed to your matlab path. To be run each time you begin a new TXTL toolbox session.</p><pre class="codeinput">txtl_init;
-</pre><h2 id="3">IFFL example</h2><p>The code below can be used to set up the constitutive GFP production example.</p><p>Set up the standard TXTL tubes These load up the RNAP, Ribosome and degradation enzyme concentrations ``E2'' refers to a configuration file</p><pre class="codeinput">tube1 = txtl_extract(<span class="string">'E2'</span>);
+  </style></head><body><div class="content"><h1>Tutorial III: Model details: Events, parameter scope and rules.</h1><!--introduction--><p>This tutorial is a continuation of the first two tutorials. We use the same negative autoregulation circuit, but now discuss more details about the model structure.</p><p>Vipul Singhal</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Create the model</a></li><li><a href="#2">Simbiology events used to model ATP and GTP degradation.</a></li><li><a href="#11">Locally scoped parameters.</a></li><li><a href="#16">Simbiology Rules</a></li></ul></div><h2 id="1">Create the model</h2><pre class="codeinput">txtl_init;
+tube1 = txtl_extract(<span class="string">'E2'</span>);
 tube2 = txtl_buffer(<span class="string">'E2'</span>);
-
-<span class="comment">% Now set up a tube that will contain our DNA</span>
-tube3 = txtl_newtube(<span class="string">'lastetIFFL'</span>);
-
-
-<span class="comment">% Define the DNA strands, and all the relevant reactions</span>
-txtl_add_dna(tube3, <span class="keyword">...</span>
-  <span class="string">'plac(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'lasR(1000)'</span>, 5, <span class="string">'plasmid'</span>);
-txtl_add_dna(tube3, <span class="keyword">...</span>
-  <span class="string">'plas(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'tetR(1000)'</span>, 0.2, <span class="string">'plasmid'</span>);
-txtl_add_dna(tube3, <span class="keyword">...</span>
-  <span class="string">'plas_ptet(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'deGFP(1000)'</span>, 2, <span class="string">'plasmid'</span>);
-m = txtl_combine([tube1, tube2, tube3]);
-txtl_addspecies(m, <span class="string">'OC12HSL'</span>, 1000);
-txtl_addspecies(m, <span class="string">'aTc'</span>, 1000);
-
-<span class="comment">% Mix the contents of the individual tubes</span>
+tube3 = txtl_newtube(<span class="string">'negautoreg'</span>); <span class="comment">% name the circuit</span>
+txtl_add_dna(tube3, <span class="string">'ptet(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'tetR(1200)'</span>, 1, <span class="string">'plasmid'</span>);
+txtl_add_dna(tube3, <span class="string">'ptet(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'deGFP(1000)'</span>, 1, <span class="string">'plasmid'</span>);
 Mobj = txtl_combine([tube1, tube2, tube3]);
-
-<span class="comment">% Run a simulaton</span>
-<span class="comment">%</span>
-
-tic
 [simData] = txtl_runsim(Mobj,14*60*60);
-toc
 t_ode = simData.Time;
 x_ode = simData.Data;
-</pre><pre class="codeoutput">Elapsed time is 0.802421 seconds.
-</pre><h2 id="4">plot the result</h2><p>The following function plots the proteins, RNA and resources in the toolbox. In the next section we delve deeper into the object oriented structure of the model, and how to plot arbitrary species in the model.</p><pre class="codeinput">txtl_plot(simData,Mobj);
+txtl_plot(t_ode, x_ode, Mobj);
 </pre><pre class="codeoutput">Current plot held
-</pre><img vspace="5" hspace="5" src="tutorial_iii_01.png" alt=""> <h2 id="5">Model Structure</h2><p>The model is organized as a model object, with sub objects specifying Parameters, Reactions, Species, etc. Type in</p><pre class="codeinput">Mobj
+</pre><img vspace="5" hspace="5" src="tutorial_iii_01.png" alt=""> <h2 id="2">Simbiology events used to model ATP and GTP degradation.</h2><p>The model has an event that sets the regeneration rate of AGTP (a species used to account for one unit of ATP and one of GTP) to 0 after a fixed period of time. The degradaton and regeneration reactions are:</p><pre class="codeinput">degrx = sbioselect(Mobj.reactions, <span class="string">'Reaction'</span>, <span class="string">'AGTP -&gt; AGMP'</span>);
+regrx = sbioselect(Mobj.reactions, <span class="string">'Reaction'</span>, <span class="string">'AGMP -&gt; AGTP'</span>);
+</pre><p>with parameters <tt>AGTPdeg_rate</tt> and <tt>AGTPreg_varying</tt> respectively. These can be seen by typing in</p><pre class="language-matlab">get(degrx.KineticLaw)
+get(regrx.KineticLaw)
+</pre><p>Note that these parameters are globally scoped, in that the local Parameters field in the KineticLaw is empty (<tt>degrx.KineticLaw.Parameters</tt> returns empty, and indeed the parameter is found at the model scope, which can be verified by typing in <tt>Mobj.Parameters</tt>. You may verify this for yourself. The globally scoped model parameters are</p><pre class="codeinput">Mobj.Parameters
 </pre><pre class="codeoutput">
-   SimBiology Model - mix_of_E2_E2_lastetIFFL 
+   SimBiology Parameter Array
 
-   Model Components:
-     Compartments:      1
-     Events:            2
-     Parameters:        163
-     Reactions:         102
-     Rules:             12
-     Species:           80
+   Index:    Name:                          Value:        ValueUnits:
+   1         TX_elong_glob                  12.418        
+   2         TX_transcription_utr1_tetR     0.0101787     
+   3         TX_NTPcons_utr1_tetR           3.09432       
+   4         TL_elong_glob                  23.826        
+   5         TL_translation_tetR            0             
+   6         TL_REScons_tetR                0             
+   7         TX_transcription_utr1_deGFP    0.0121745     
+   8         TX_NTPcons_utr1_deGFP          3.09233       
+   9         TL_translation_deGFP           0             
+   10        TL_REScons_deGFP               0             
+   11        AGTPreg_varying                0.02          
+   12        AGTPdeg_time                   6529.5        
+   13        AGTPreg_ON                     0.02          
+   14        AGTPdeg_rate                   4.8663e-05    
 
-</pre><p>We can see the number of instances of the various subclasses of the model object. We can explore further by typing</p><pre class="codeinput">Mobj.Species
+</pre><p>You might find it helpful to learn more about parameter scoping <a href="https://www.mathworks.com/help/simbio/ref/addparameter.html">here</a>.</p><p>And the kinetics of the degradation reaction are:</p><pre class="codeinput">get(degrx.KineticLaw)
+</pre><pre class="codeoutput">                Annotation: ''
+                      Name: ''
+                     Notes: ''
+                       Tag: ''
+                      Type: 'kineticlaw'
+                  UserData: []
+                Expression: 'MassAction'
+            KineticLawName: 'MassAction'
+                Parameters: [0&times;1 double]
+        ParameterVariables: {'Forward Rate Parameter'}
+    ParameterVariableNames: {'AGTPdeg_rate'}
+                    Parent: [1&times;1 SimBiology.Reaction]
+          SpeciesVariables: {'MassAction Species'}
+      SpeciesVariableNames: {'AGTP'}
+
+</pre><p>There are four parameters associated with these two reactions:</p><pre class="codeinput">prm = Mobj.Parameters(end-3:end)
 </pre><pre class="codeoutput">
-   SimBiology Species Array
+   SimBiology Parameter Array
 
-   Index:    Compartment:    Name:                                                                     InitialAmount:    InitialAmountUnits:
-   1         contents        RNAP                                                                      4.7367            
-   2         contents        Ribo                                                                      266.42            
-   3         contents        RecBCD                                                                    5                 
-   4         contents        RNase                                                                     30269             
-   5         contents        AGTP                                                                      3.18005e+06       
-   6         contents        CUTP                                                                      1.90803e+06       
-   7         contents        AA                                                                        3.18005e+07       
-   8         contents        protein lasR                                                              0                 
-   9         contents        OC12HSL:protein lasR                                                      0                 
-   10        contents        RNA utr1--lasR                                                            0                 
-   11        contents        Ribo:RNA utr1--lasR                                                       0                 
-   12        contents        DNA plac--utr1--lasR                                                      5                 
-   13        contents        RNAP:DNA plac--utr1--lasR                                                 0                 
-   14        contents        CUTP:AGTP:RNAP:DNA plac--utr1--lasR                                       0                 
-   15        contents        term_RNAP:DNA plac--utr1--lasR                                            0                 
-   16        contents        AA:AGTP:Ribo:RNA utr1--lasR                                               0                 
-   17        contents        term_Ribo:RNA utr1--lasR                                                  0                 
-   18        contents        protein tetR                                                              0                 
-   19        contents        aTc                                                                       0                 
-   20        contents        protein tetRdimer                                                         0                 
-   21        contents        RNA utr1--tetR                                                            0                 
-   22        contents        Ribo:RNA utr1--tetR                                                       0                 
-   23        contents        DNA plas--utr1--tetR                                                      0.2               
-   24        contents        RNAP:DNA plas--utr1--tetR                                                 0                 
-   25        contents        AA:AGTP:Ribo:RNA utr1--tetR                                               0                 
-   26        contents        term_Ribo:RNA utr1--tetR                                                  0                 
-   27        contents        protein deGFP                                                             0                 
-   28        contents        protein deGFP*                                                            0                 
-   29        contents        RNA utr1--deGFP                                                           0                 
-   30        contents        Ribo:RNA utr1--deGFP                                                      0                 
-   31        contents        DNA plas_ptet--utr1--deGFP                                                2                 
-   32        contents        RNAP:DNA plas_ptet--utr1--deGFP                                           0                 
-   33        contents        AA:AGTP:Ribo:RNA utr1--deGFP                                              0                 
-   34        contents        term_Ribo:RNA utr1--deGFP                                                 0                 
-   35        contents        OC12HSL                                                                   0                 
-   36        contents        AGTP:RNAP:DNA plac--utr1--lasR                                            0                 
-   37        contents        CUTP:RNAP:DNA plac--utr1--lasR                                            0                 
-   38        contents        AA:Ribo:RNA utr1--lasR                                                    0                 
-   39        contents        RNA utr1--lasR:RNase                                                      0                 
-   40        contents        Ribo:RNA utr1--lasR:RNase                                                 0                 
-   41        contents        AA:AGTP:Ribo:RNA utr1--lasR:RNase                                         0                 
-   42        contents        term_Ribo:RNA utr1--lasR:RNase                                            0                 
-   43        contents        AA:Ribo:RNA utr1--lasR:RNase                                              0                 
-   44        contents        2 aTc:protein tetRdimer                                                   0                 
-   45        contents        DNA plas--utr1--tetR:OC12HSL:protein lasR                                 0                 
-   46        contents        RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR                            0                 
-   47        contents        CUTP:AGTP:RNAP:DNA plas--utr1--tetR                                       0                 
-   48        contents        term_RNAP:DNA plas--utr1--tetR                                            0                 
-   49        contents        CUTP:AGTP:RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR                  0                 
-   50        contents        term_RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR                       0                 
-   51        contents        AGTP:RNAP:DNA plas--utr1--tetR                                            0                 
-   52        contents        CUTP:RNAP:DNA plas--utr1--tetR                                            0                 
-   53        contents        AGTP:RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR                       0                 
-   54        contents        CUTP:RNAP:DNA plas--utr1--tetR:OC12HSL:protein lasR                       0                 
-   55        contents        AA:Ribo:RNA utr1--tetR                                                    0                 
-   56        contents        RNA utr1--tetR:RNase                                                      0                 
-   57        contents        Ribo:RNA utr1--tetR:RNase                                                 0                 
-   58        contents        AA:AGTP:Ribo:RNA utr1--tetR:RNase                                         0                 
-   59        contents        term_Ribo:RNA utr1--tetR:RNase                                            0                 
-   60        contents        AA:Ribo:RNA utr1--tetR:RNase                                              0                 
-   61        contents        DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR                           0                 
-   62        contents        RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR                      0                 
-   63        contents        CUTP:AGTP:RNAP:DNA plas_ptet--utr1--deGFP                                 0                 
-   64        contents        term_RNAP:DNA plas_ptet--utr1--deGFP                                      0                 
-   65        contents        CUTP:AGTP:RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR            0                 
-   66        contents        term_RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR                 0                 
-   67        contents        AGTP:RNAP:DNA plas_ptet--utr1--deGFP                                      0                 
-   68        contents        CUTP:RNAP:DNA plas_ptet--utr1--deGFP                                      0                 
-   69        contents        AGTP:RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR                 0                 
-   70        contents        CUTP:RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR                 0                 
-   71        contents        DNA plas_ptet--utr1--deGFP:protein tetRdimer                              0                 
-   72        contents        DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR:protein tetRdimer         0                 
-   73        contents        RNAP:DNA plas_ptet--utr1--deGFP:OC12HSL:protein lasR:protein tetRdimer    0                 
-   74        contents        AA:Ribo:RNA utr1--deGFP                                                   0                 
-   75        contents        RNA utr1--deGFP:RNase                                                     0                 
-   76        contents        Ribo:RNA utr1--deGFP:RNase                                                0                 
-   77        contents        AA:AGTP:Ribo:RNA utr1--deGFP:RNase                                        0                 
-   78        contents        term_Ribo:RNA utr1--deGFP:RNase                                           0                 
-   79        contents        AA:Ribo:RNA utr1--deGFP:RNase                                             0                 
-   80        contents        AGTP_USED                                                                 0                 
+   Index:    Name:              Value:        ValueUnits:
+   1         AGTPreg_varying    0.02          
+   2         AGTPdeg_time       6529.5        
+   3         AGTPreg_ON         0.02          
+   4         AGTPdeg_rate       4.8663e-05    
 
-</pre><p>Proteins, RNA and DNA generally follow the convention protein CDS, RNA 5'UTR--CDS, DNA promoter--5' UTR--CDS, with variations possible. There are also simply named `core' species like RNAP, Ribo, RNase, etc. Finally we denote bound complexes with a colon, for example, Species 1:Species 2.</p><p>We also see that each of them has certain other associated properties. You can explore further by accessing individual species using their index, and using the `get' and `set' commands to get and set the properties of the species. For example, try typing</p><pre class="codeinput">Mobj.Species(1)
+</pre><p>From time <tt>t = 0 to AGTPdeg_time</tt> seconds, the parameter <tt>AGTPreg_varying = AGTPreg_ON</tt>, but once <tt>time &gt; AGTPdeg_time</tt> seconds, a simbiology event sets the the parameter <tt>AGTPreg_varying = 0</tt>. The degradation rate parameter <tt>AGTPdeg_rate</tt> is always at a constant value.</p><p>This timing based behavior is implemented using Simbiology events, and can be verified by typing in</p><pre class="codeinput">Mobj.Events
 </pre><pre class="codeoutput">
-   SimBiology Species Array
+   SimBiology Event Array
 
-   Index:    Compartment:    Name:    InitialAmount:    InitialAmountUnits:
-   1         contents        RNAP     4.7367            
+   Index:    Trigger:                EventFcns:
+   1         time &lt;= AGTPdeg_time    AGTPreg_varying = AGTPreg_ON
+   2         time &gt; AGTPdeg_time     AGTPreg_varying = 0
 
-</pre><p>This gives you the first species in the model. You can find out what properties as associated with this species by typing in</p><pre class="codeinput">get(Mobj.Species(1))
-</pre><pre class="codeoutput">            Annotation: ''
-     BoundaryCondition: 0
-        ConstantAmount: 0
-         InitialAmount: 4.7367
-    InitialAmountUnits: ''
-                  Name: 'RNAP'
-                 Notes: ''
-                Parent: [1&times;1 SimBiology.Compartment]
-                   Tag: ''
-                  Type: 'species'
-              UserData: []
+</pre><h2 id="11">Locally scoped parameters.</h2><p>Most other parameters in the model are locally scoped. I.e., to view the parameters associated with most reactions, you must access it through the reaction's KineticLaw object, as shown below.</p><pre class="codeinput">Mobj.Reactions(1)
+</pre><pre class="codeoutput">
+   SimBiology Reaction Array
 
-</pre><p>and then using the set command to set its initial concentration to 50 units:</p><pre class="codeinput">set(Mobj.Species(1), <span class="string">'InitialAmount'</span>, 50)
-</pre><p>Learn more about the get and set commands by typing in</p><pre class="language-matlab">help <span class="string">get</span>
-help <span class="string">set</span>
-</pre><p>You may read more about how model objects are arranged in Simbiology by working through the <a href="https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html">Tutorial</a>. Feel free to browse the reactions and other subproperties by individually typing in commands like</p><pre class="language-matlab">Mobj.reactions
-get(Mobj.Reactions)
-get(Mobj.Reactions(1))
-Mobj.Reactions(1).ReactionRate
-Mobj.Reactions(1).KineticLaw
-get(Mobj.Reactions(1).KineticLaw)
-</pre><p>and so on.</p><h2 id="16">Plotting individual species</h2><p>You can also plot the trajectories of any of the species in the model. Use the function findspecies to get the index of the species object of interest. For example, if you want to plot the trajectory of the dimerized tetR protein, you could type in</p><pre class="codeinput">tetRindex = findspecies(Mobj, <span class="string">'protein deGFP'</span>);
-figure
-plot(simData.Time/3600, simData.data(:,tetRindex));
-title(<span class="string">'Un-matured protein concentration'</span>)
-ylabel(<span class="string">'concentration, nM'</span>)
-xlabel(<span class="string">'time, h'</span>)
-curraxis = axis;
-axis([curraxis(1:2) 0 curraxis(4)])
-</pre><img vspace="5" hspace="5" src="tutorial_iii_02.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+   Index:    Reaction:
+   1         [protein tetRdimer] + 2 aTc &lt;-&gt; [2 aTc:protein tetRdimer]
+
+</pre><pre class="codeinput">get(Mobj.Reactions(1).KineticLaw)
+</pre><pre class="codeoutput">                Annotation: ''
+                      Name: ''
+                     Notes: ''
+                       Tag: ''
+                      Type: 'kineticlaw'
+                  UserData: []
+                Expression: 'MassAction'
+            KineticLawName: 'MassAction'
+                Parameters: [2&times;1 SimBiology.Parameter]
+        ParameterVariables: {1&times;2 cell}
+    ParameterVariableNames: {1&times;2 cell}
+                    Parent: [1&times;1 SimBiology.Reaction]
+          SpeciesVariables: {'MassAction Species'}
+      SpeciesVariableNames: {1&times;3 cell}
+
+</pre><pre class="codeinput">Mobj.Reactions(1).KineticLaw.Parameters
+</pre><pre class="codeoutput">
+   SimBiology Parameter Array
+
+   Index:    Name:                      Value:    ValueUnits:
+   1         TXTL_INDUCER_TETR_ATC_F    4.8404    
+   2         TXTL_INDUCER_TETR_ATC_R    0.6551    
+
+</pre><p>and so on.</p><h2 id="16">Simbiology Rules</h2><p>Finally, Simbiology allows us to define rules that bind different components of the model together. In our model, rules are used to tie together the elongation rate parameter to the transcription rate, and to the resource consumption rate:</p><pre class="language-matlab">Mobj.Rules
+</pre><p>gives</p><pre>  SimBiology Rule Array</pre><pre>  Index:    RuleType:            Rule:
+  1         initialAssignment    TX_transcription_utr1_tetR = TX_elong_glob/1220
+  2         initialAssignment    TX_NTPcons_utr1_tetR = TX_elong_glob/1220*(305-1)
+  3         initialAssignment    TL_translation_tetR = TL_elong_glob/400
+  4         initialAssignment    TL_REScons_tetR = TL_elong_glob/400*(400-1)
+  5         initialAssignment    TX_transcription_utr1_deGFP = TX_elong_glob/1020
+  6         initialAssignment    TX_NTPcons_utr1_deGFP = TX_elong_glob/1020*(255-1)
+  7         initialAssignment    TL_translation_deGFP = TL_elong_glob/333
+  8         initialAssignment    TL_REScons_deGFP = TL_elong_glob/333*(333-1)</pre><p>Looking at the first rule, for example, we see that the transcription rate of the tetR mRNA is the global elongation rate <tt>TX_elong_glob</tt> divided by the length of the RNA to be transcribed.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% Tutorial III
-% tutorial_iii.m - Incoherent feedforward loop example. We
-% recommend you read through tutorials i and ii before trying this one out.
-% All the tutorials can be found on the index page,
-% <https://vipulsinghal02.github.io/txtlsim_buildacell/
-% here>.
+%% Tutorial III: Model details: Events, parameter scope and rules. 
+% This tutorial is a continuation of the first two tutorials. We use the same
+% negative autoregulation circuit, but now discuss more details about the
+% model structure. 
 % 
 % Vipul Singhal
 
-%% todos
-% 
-% 
-% # describe the IFFL circuit, along with 3OC12 and aTc addspecies. show a
-% few different variations of what happens when the concentrations of
-% things are changed. 
-% # add some meat to the reactions and species naming conventions. 
-% # show how to set the parameters in the config file
-% # show the constitutive expression promoter file, the repression promoter
-% and protein files, the activator and combinatorial promoter file, and
-% describe where to change things (including the CSV file) to get a new
-% part made. 
-% # show some variations: linear DNA, recBCD, gamS; clpX + lva tag
-% # show the intermediate species trajectories at different doses. this can
-% be done using the plotCustomSpecies2 function. 
-% # show the use of the globalize params, getparam, setparam methods. 
-% # 
-% 
-
-%% Initializing the toolbox
-% Remember to set the working directory to the trunk directory of the
-% toolbox. 
-% 
-% Use this command to add the subdirectories needed to your matlab path. To
-% be run each time you begin a new TXTL toolbox session. 
+%% Create the model
 txtl_init;
-
-%% IFFL example
-% The code below can be used to set up the constitutive GFP production
-% example. 
-% 
-% Set up the standard TXTL tubes
-% These load up the RNAP, Ribosome and degradation enzyme concentrations
-% ``E2'' refers to a configuration file 
 tube1 = txtl_extract('E2');
 tube2 = txtl_buffer('E2');
-
-% Now set up a tube that will contain our DNA
-tube3 = txtl_newtube('lastetIFFL');
-
-
-% Define the DNA strands, and all the relevant reactions
-txtl_add_dna(tube3, ...
-  'plac(50)', 'utr1(20)', 'lasR(1000)', 5, 'plasmid');	
-txtl_add_dna(tube3, ...
-  'plas(50)', 'utr1(20)', 'tetR(1000)', 0.2, 'plasmid');	
-txtl_add_dna(tube3, ...
-  'plas_ptet(50)', 'utr1(20)', 'deGFP(1000)', 2, 'plasmid');	
-m = txtl_combine([tube1, tube2, tube3]);
-txtl_addspecies(m, 'OC12HSL', 1000);
-txtl_addspecies(m, 'aTc', 1000);
-
-% Mix the contents of the individual tubes
+tube3 = txtl_newtube('negautoreg'); % name the circuit
+txtl_add_dna(tube3, 'ptet(50)', 'utr1(20)', 'tetR(1200)', 1, 'plasmid');
+txtl_add_dna(tube3, 'ptet(50)', 'utr1(20)', 'deGFP(1000)', 1, 'plasmid');
 Mobj = txtl_combine([tube1, tube2, tube3]);
+[simData] = txtl_runsim(Mobj,14*60*60); 
+t_ode = simData.Time; 
+x_ode = simData.Data; 
+txtl_plot(t_ode, x_ode, Mobj);
 
-% Run a simulaton
-% 
-
-tic
-[simData] = txtl_runsim(Mobj,14*60*60);
-toc
-t_ode = simData.Time;
-x_ode = simData.Data;
-
-%% plot the result
-% The following function plots the proteins, RNA and resources in the
-% toolbox. In the next section we delve deeper into the object oriented
-% structure of the model, and how to plot arbitrary species in the model. 
-txtl_plot(simData,Mobj);
-
-%% Model Structure
-% The model is organized as a model object, with sub objects specifying
-% Parameters, Reactions, Species, etc. Type in 
-Mobj
+%% Simbiology events used to model ATP and GTP degradation. 
+% The model has an event that sets the regeneration rate of AGTP (a species
+% used to account for one unit of ATP and one of GTP) to 0 after a fixed
+% period of time. The degradaton and regeneration reactions are: 
+degrx = sbioselect(Mobj.reactions, 'Reaction', 'AGTP -> AGMP'); 
+regrx = sbioselect(Mobj.reactions, 'Reaction', 'AGMP -> AGTP');
+%%
+% with parameters |AGTPdeg_rate| and |AGTPreg_varying| respectively. These
+% can be seen by typing in 
+%%
+%   get(degrx.KineticLaw)
+%   get(regrx.KineticLaw)
+%%
+% Note that these parameters are globally scoped, in that the local Parameters
+% field in the KineticLaw is empty (|degrx.KineticLaw.Parameters| returns empty,
+% and indeed the parameter is found at the model scope, which can be
+% verified by typing in |Mobj.Parameters|. You may verify this for
+% yourself. The globally scoped model parameters are
+Mobj.Parameters
 
 %%
-% We can see the number of instances of the various subclasses of the 
-% model object. We can explore further by typing 
-Mobj.Species
+% You might find it helpful to learn more about parameter scoping 
+% <https://www.mathworks.com/help/simbio/ref/addparameter.html here>. 
 
 %%
-% Proteins, RNA and DNA generally follow the convention
-% protein CDS, RNA 5'UTRREPLACE_WITH_DASH_DASHCDS, DNA promoterREPLACE_WITH_DASH_DASH5' UTRREPLACE_WITH_DASH_DASHCDS, with
-% variations possible. There are also simply named `core' species like
-% RNAP, Ribo, RNase, etc. Finally we denote bound complexes with a colon,
-% for example, Species 1:Species 2. 
-%% 
-% We also see that each of them has certain
-% other associated properties. You can explore further by accessing
-% individual species using their index, and using the `get' and `set' commands
-% to get and set the properties of the species. For example, try typing 
-Mobj.Species(1)
-
-%% 
-% This gives you the first species in the model. You can find out what
-% properties as associated with this species by typing in 
-get(Mobj.Species(1))
+% And the kinetics of the degradation reaction are:
+get(degrx.KineticLaw)
 
 %%
-% and then using the set command to set its initial concentration to 50
-% units:
-set(Mobj.Species(1), 'InitialAmount', 50)
-
+% There are four parameters associated with these two reactions: 
+prm = Mobj.Parameters(end-3:end)
 %%
-% Learn more about the get and set commands by typing in 
+% From time
+% |t = 0 to AGTPdeg_time| seconds, the parameter 
+% |AGTPreg_varying = AGTPreg_ON|, but once 
+% |time > AGTPdeg_time| seconds, a simbiology event sets the the parameter
+% |AGTPreg_varying = 0|. 
+% The degradation rate parameter |AGTPdeg_rate| is always at a constant
+% value. 
 %%
-%   help get
-%   help set
+% This timing based behavior is implemented using Simbiology events, and
+% can be verified by typing in 
+Mobj.Events
 
 
-%% 
-% You may read more about how model objects are arranged in Simbiology by
-% working through the
-% <https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html
-% Tutorial>. Feel free to browse the reactions and other subproperties by
-% individually typing in commands like 
+%% Locally scoped parameters. 
+% Most other parameters in the model are locally scoped. I.e., to view the
+% parameters associated with most reactions, you must access it through the
+% reaction's KineticLaw object, as shown below. 
 %%
-% 
-%   Mobj.reactions
-%   get(Mobj.Reactions)
-%   get(Mobj.Reactions(1))
-%   Mobj.Reactions(1).ReactionRate
-%   Mobj.Reactions(1).KineticLaw
-%   get(Mobj.Reactions(1).KineticLaw)
+Mobj.Reactions(1)
+%%
+get(Mobj.Reactions(1).KineticLaw)
+%%
+Mobj.Reactions(1).KineticLaw.Parameters
 %%
 % and so on.
-%% Plotting individual species
-% You can also plot the trajectories of any of the species in the model.
-% Use the function findspecies to get the index of the species object of interest. For
-% example, if you want to plot the trajectory of the dimerized tetR
-% protein, you could type in
+%% Simbiology Rules
+% Finally, Simbiology allows us to define rules that bind different
+% components of the model together. In our model, rules are used to tie
+% together the elongation rate parameter to the transcription rate, and to
+% the resource consumption rate: 
+%%
+%   Mobj.Rules
+%%
+% gives
+%%
+% 
+%    SimBiology Rule Array
+% 
+%    Index:    RuleType:            Rule:
+%    1         initialAssignment    TX_transcription_utr1_tetR = TX_elong_glob/1220
+%    2         initialAssignment    TX_NTPcons_utr1_tetR = TX_elong_glob/1220*(305-1)
+%    3         initialAssignment    TL_translation_tetR = TL_elong_glob/400
+%    4         initialAssignment    TL_REScons_tetR = TL_elong_glob/400*(400-1)
+%    5         initialAssignment    TX_transcription_utr1_deGFP = TX_elong_glob/1020
+%    6         initialAssignment    TX_NTPcons_utr1_deGFP = TX_elong_glob/1020*(255-1)
+%    7         initialAssignment    TL_translation_deGFP = TL_elong_glob/333
+%    8         initialAssignment    TL_REScons_deGFP = TL_elong_glob/333*(333-1)
 
-tetRindex = findspecies(Mobj, 'protein deGFP');
-figure
-plot(simData.Time/3600, simData.data(:,tetRindex));
-title('Un-matured protein concentration')
-ylabel('concentration, nM')
-xlabel('time, h')
-curraxis = axis; 
-axis([curraxis(1:2) 0 curraxis(4)])
-
+%%
+% Looking at the first rule, for example, we see that the transcription rate of the
+% tetR mRNA is the global elongation rate |TX_elong_glob| divided by the
+% length of the RNA to be transcribed. 
 
 ##### SOURCE END #####
 --></body></html>

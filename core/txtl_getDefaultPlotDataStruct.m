@@ -27,12 +27,12 @@ function dataGroup = txtl_getDefaultPlotDataStruct()
 
 dataGroup(1).plotName = 'DNA and mRNA';
 dataGroup(1).SpeciesToPlot = {'ALL_DNA'};
-dataGroup(1).colorCodes = {'b','r','g','b--','r--','g--','c','y','w','k'}; 
+dataGroup(1).colorCodes = {'b','r','g','b--','r--','g--','c','m','k','c--','m--','k--'}; 
 
 % Gene Expression Plot
 dataGroup(2).plotName = 'Gene Expression';
 dataGroup(2).SpeciesToPlot = {'ALL_PROTEIN'};
-dataGroup(2).colorCodes = {'b','r','g','b--','r--','g--','c','y','w','k'}; 
+dataGroup(2).colorCodes = {'b','r','g','b--','r--','g--','c','m','k','c--','m--','k--'}; 
 
 % Resource Plot
 dataGroup(3).plotName = 'Resource usage';

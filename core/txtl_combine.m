@@ -128,6 +128,19 @@ for i = 1:length(Mobj.Species)
   Mobj.Species(i).InitialAmount = Mobj.Species(i).InitialAmount / totalvol;
 end
 
+Mobj.UserData.energymode = 'regeneration';  
+% See:  
+% https://www.mathworks.com/help/simbio/ug/selecting-absolute-  
+% tolerance-and-relative-tolerance-for-simulation.html  
+cs1 = getconfigset(Mobj); 
+set(cs1.RuntimeOptions, 'StatesToLog', 'all');  
+% set(cs1.SolverOptions, 'AbsoluteToleranceScaling', 1);  
+% set(cs1.SolverOptions, 'AbsoluteTolerance', 1.0e-6);  
+% set(cs1.SolverOptions, 'AbsoluteToleranceStepSize', 6*3600*1.0e-6*0.1); 
+% set(cs1.SolverOptions, 'RelativeTolerance', 1.0e-6);  
+% try: AbsoluteToleranceStepSize = AbsoluteTolerance * StopTime * 0.1 
+
+
 return
 
 % Copy a list of objects to a model

@@ -1,4 +1,4 @@
-function [mcmc_info, varargout] = mcmc_info_ZSIFFL_training_fullE(mtet, mlac, mlas)
+ function [mcmc_info, varargout] = mcmc_info_ZSIFFL_training_fullE(mtet, mlac, mlas)
 % !! todo -- set the parameters estimated from phase 1. then this will be
 % ready to run. 
 % Phase 2 of the estimation procedure of the tetR system parameters from

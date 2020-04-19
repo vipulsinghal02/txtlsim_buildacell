@@ -1,0 +1,240 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Tutorial IV</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-04-20"><meta name="DC.source" content="tutorial_iv.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Tutorial IV</h1><!--introduction--><p>In this tutorial, we will discuss a few different circuits.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Initializing the toolbox</a></li><li><a href="#3">Constitutive expression with linear DNA</a></li><li><a href="#4">Constitutive expression with linear RNA, and protection from endonucleases.</a></li><li><a href="#5">The incoherent feedforward loop</a></li><li><a href="#6">The incoherent feedforward loop with ClpX mediated degradation</a></li><li><a href="#7">Plot the deGFP trajectories for the with- and without- ClpX cases</a></li><li><a href="#8">The Incoherent Feedforward loop</a></li></ul></div><div><ol><li>linear DNA degradation example. -- recBCD, gamS. Zach paper.</li><li>ClpX degradation example. (from tech report)</li><li>activator example + inducer (use our characterization)</li><li>combinatorial promoter example + inducers. (use our characterization) #repressor example (use our characterization, and lacI too, find a characterization of lacI in TXTL/ or just relative to tetR.)</li><li>rbs varying example (use the mutalik paper to estimate the RBSs)</li><li>constitutive promoter example (use the anderson promoter library to</li><li>estimate promoter strength )</li><li>genetic toggle with the data collected. (anushka, enrique)</li><li>Can look at the TXTL2.0 paper for possible data. maybe wan to split this into multiple smaller links? No need. just have a contents page.</li></ol></div><h2 id="2">Initializing the toolbox</h2><pre class="codeinput">txtl_init;
+</pre><h2 id="3">Constitutive expression with linear DNA</h2><h2 id="4">Constitutive expression with linear RNA, and protection from endonucleases.</h2><h2 id="5">The incoherent feedforward loop</h2><pre class="codeinput">tube1 = txtl_extract(<span class="string">'E3'</span>);
+tube2 = txtl_buffer(<span class="string">'E3'</span>);
+<span class="comment">% Now set up a tube that will contain our DNA</span>
+tube3 = txtl_newtube(<span class="string">'lastetIFFL'</span>);
+<span class="comment">% Define the DNA strands, and all the relevant reactions</span>
+txtl_add_dna(tube3, <span class="keyword">...</span>
+  <span class="string">'plac(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'lasR(1000)'</span>, .5, <span class="string">'plasmid'</span>);
+txtl_add_dna(tube3, <span class="keyword">...</span>
+  <span class="string">'plas(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'tetR(1000)'</span>, 0.1, <span class="string">'plasmid'</span>);
+txtl_add_dna(tube3, <span class="keyword">...</span>
+  <span class="string">'plas_ptet(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'deGFP(1000)-lva'</span>, 2, <span class="string">'plasmid'</span>);
+
+<span class="comment">% Mix the contents of the individual tubes</span>
+Mobj = txtl_combine([tube1, tube2, tube3]);
+txtl_addspecies(Mobj, <span class="string">'OC12HSL'</span>, 500);
+txtl_addspecies(Mobj, <span class="string">'aTc'</span>, 200);
+txtl_addspecies(Mobj, <span class="string">'protein ClpX*'</span>, 0)
+[simData_no_clpx] = txtl_runsim(Mobj,14*60*60);
+txtl_plot(simData_no_clpx,Mobj);
+gfp_index_no_clpx = findspecies(Mobj, <span class="string">'protein deGFP-lva*'</span>);
+</pre><pre class="codeoutput">
+   SimBiology Species Array
+
+   Index:    Compartment:    Name:            InitialAmount:    InitialAmountUnits:
+   1         contents        protein ClpX*    0                 
+
+Current plot held
+</pre><img vspace="5" hspace="5" src="tutorial_iv_01.png" alt=""> <h2 id="6">The incoherent feedforward loop with ClpX mediated degradation</h2><pre class="codeinput">close <span class="string">all</span>
+tube1 = txtl_extract(<span class="string">'E3'</span>);
+tube2 = txtl_buffer(<span class="string">'E3'</span>);
+<span class="comment">% Now set up a tube that will contain our DNA</span>
+tube3 = txtl_newtube(<span class="string">'lastetIFFL'</span>);
+<span class="comment">% Define the DNA strands, and all the relevant reactions</span>
+txtl_add_dna(tube3, <span class="keyword">...</span>
+  <span class="string">'plac(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'lasR(1000)'</span>, 0.5, <span class="string">'plasmid'</span>);
+txtl_add_dna(tube3, <span class="keyword">...</span>
+  <span class="string">'plas(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'tetR(1000)'</span>, 0.1, <span class="string">'plasmid'</span>);
+txtl_add_dna(tube3, <span class="keyword">...</span>
+  <span class="string">'plas_ptet(50)'</span>, <span class="string">'utr1(20)'</span>, <span class="string">'deGFP(1000)-lva'</span>, 2, <span class="string">'plasmid'</span>);
+<span class="comment">% Mix the contents of the individual tubes</span>
+Mobj = txtl_combine([tube1, tube2, tube3]);
+txtl_addspecies(Mobj, <span class="string">'OC12HSL'</span>, 500);
+txtl_addspecies(Mobj, <span class="string">'aTc'</span>, 200);
+txtl_addspecies(Mobj, <span class="string">'protein ClpX*'</span>, 500)
+[simData_with_clpx] = txtl_runsim(Mobj,14*60*60);
+txtl_plot(simData_with_clpx,Mobj);
+gfp_index_with_clpx = findspecies(Mobj, <span class="string">'protein deGFP-lva*'</span>);
+</pre><pre class="codeoutput">
+   SimBiology Species Array
+
+   Index:    Compartment:    Name:            InitialAmount:    InitialAmountUnits:
+   1         contents        protein ClpX*    500               
+
+Current plot held
+</pre><img vspace="5" hspace="5" src="tutorial_iv_02.png" alt=""> <h2 id="7">Plot the deGFP trajectories for the with- and without- ClpX cases</h2><pre class="codeinput">figure
+
+withoutclpx = plot(simData_no_clpx.Time/3600, <span class="keyword">...</span>
+    simData_no_clpx.data(:,gfp_index_no_clpx), <span class="keyword">...</span>
+    <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, <span class="string">'r'</span>);
+hold <span class="string">on</span>
+withclpx = plot(simData_with_clpx.Time/3600, <span class="keyword">...</span>
+    simData_with_clpx.data(:,gfp_index_with_clpx), <span class="keyword">...</span>
+    <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, <span class="string">'b'</span>);
+title(<span class="string">'matured GFP concentration'</span>,<span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14)
+ylabel(<span class="string">'concentration, nM'</span>,<span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14)
+xlabel(<span class="string">'time, h'</span>,<span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14)
+legend([withoutclpx, withclpx], {<span class="string">'without ClpX'</span>, <span class="string">'with ClpX'</span>},<span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14, <span class="string">'Location'</span>, <span class="string">'NorthWest'</span>)
+curraxis = axis;
+axis([curraxis(1:2) 0 curraxis(4)])
+</pre><img vspace="5" hspace="5" src="tutorial_iv_03.png" alt=""> <h2 id="8">The Incoherent Feedforward loop</h2><p>Set up the standard TXTL tubes These load up the RNAP, Ribosome and degradation enzyme concentrations ``E2'' refers to a configuration file</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Tutorial IV
+% In this tutorial, we will discuss a few different circuits. 
+
+%%
+% # linear DNA degradation example. REPLACE_WITH_DASH_DASH recBCD, gamS. Zach paper. 
+% # ClpX degradation example. (from tech report)
+% # activator example + inducer (use our characterization)
+% # combinatorial promoter example + inducers. (use our characterization)
+% #repressor example (use our characterization, and lacI too, find a characterization of lacI in TXTL/ or just relative to tetR.)
+% # rbs varying example (use the mutalik paper to estimate the RBSs)
+% # constitutive promoter example (use the anderson promoter library to
+% # estimate promoter strength )
+% # genetic toggle with the data collected. (anushka, enrique)
+% # Can look at the TXTL2.0 paper for possible data.
+% maybe wan to split this into multiple smaller links? No need. just have a
+% contents page. 
+% 
+
+%% Initializing the toolbox
+txtl_init;
+
+%% Constitutive expression with linear DNA
+
+%% Constitutive expression with linear RNA, and protection from endonucleases. 
+
+%% The incoherent feedforward loop
+tube1 = txtl_extract('E3');
+tube2 = txtl_buffer('E3');
+% Now set up a tube that will contain our DNA
+tube3 = txtl_newtube('lastetIFFL');
+% Define the DNA strands, and all the relevant reactions
+txtl_add_dna(tube3, ...
+  'plac(50)', 'utr1(20)', 'lasR(1000)', .5, 'plasmid');	
+txtl_add_dna(tube3, ...
+  'plas(50)', 'utr1(20)', 'tetR(1000)', 0.1, 'plasmid');	
+txtl_add_dna(tube3, ...
+  'plas_ptet(50)', 'utr1(20)', 'deGFP(1000)-lva', 2, 'plasmid');	
+
+% Mix the contents of the individual tubes
+Mobj = txtl_combine([tube1, tube2, tube3]);
+txtl_addspecies(Mobj, 'OC12HSL', 500);
+txtl_addspecies(Mobj, 'aTc', 200);
+txtl_addspecies(Mobj, 'protein ClpX*', 0)
+[simData_no_clpx] = txtl_runsim(Mobj,14*60*60);
+txtl_plot(simData_no_clpx,Mobj);
+gfp_index_no_clpx = findspecies(Mobj, 'protein deGFP-lva*');
+
+%% The incoherent feedforward loop with ClpX mediated degradation 
+close all
+tube1 = txtl_extract('E3');
+tube2 = txtl_buffer('E3');
+% Now set up a tube that will contain our DNA
+tube3 = txtl_newtube('lastetIFFL');
+% Define the DNA strands, and all the relevant reactions
+txtl_add_dna(tube3, ...
+  'plac(50)', 'utr1(20)', 'lasR(1000)', 0.5, 'plasmid');	
+txtl_add_dna(tube3, ...
+  'plas(50)', 'utr1(20)', 'tetR(1000)', 0.1, 'plasmid');	
+txtl_add_dna(tube3, ...
+  'plas_ptet(50)', 'utr1(20)', 'deGFP(1000)-lva', 2, 'plasmid');	
+% Mix the contents of the individual tubes
+Mobj = txtl_combine([tube1, tube2, tube3]);
+txtl_addspecies(Mobj, 'OC12HSL', 500);
+txtl_addspecies(Mobj, 'aTc', 200);
+txtl_addspecies(Mobj, 'protein ClpX*', 500)
+[simData_with_clpx] = txtl_runsim(Mobj,14*60*60);
+txtl_plot(simData_with_clpx,Mobj);
+gfp_index_with_clpx = findspecies(Mobj, 'protein deGFP-lva*');
+%% Plot the deGFP trajectories for the with- and without- ClpX cases
+figure
+
+withoutclpx = plot(simData_no_clpx.Time/3600, ...
+    simData_no_clpx.data(:,gfp_index_no_clpx), ...
+    'LineWidth', 2, 'Color', 'r');
+hold on
+withclpx = plot(simData_with_clpx.Time/3600, ...
+    simData_with_clpx.data(:,gfp_index_with_clpx), ...
+    'LineWidth', 2, 'Color', 'b');
+title('matured GFP concentration',...
+    'FontSize', 14)
+ylabel('concentration, nM',...
+    'FontSize', 14)
+xlabel('time, h',...
+    'FontSize', 14)
+legend([withoutclpx, withclpx], {'without ClpX', 'with ClpX'},...
+    'FontSize', 14, 'Location', 'NorthWest')
+curraxis = axis; 
+axis([curraxis(1:2) 0 curraxis(4)])
+
+%% The Incoherent Feedforward loop
+% Set up the standard TXTL tubes
+% These load up the RNAP, Ribosome and degradation enzyme concentrations
+% ``E2'' refers to a configuration file 
+
+##### SOURCE END #####
+--></body></html>

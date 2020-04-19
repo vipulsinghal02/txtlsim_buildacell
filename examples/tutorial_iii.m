@@ -1,150 +1,104 @@
-%% Tutorial III
-% tutorial_iii.m - Incoherent feedforward loop example. We
-% recommend you read through tutorials i and ii before trying this one out.
-% All the tutorials can be found on the index page,
-% <https://vipulsinghal02.github.io/txtlsim_buildacell/
-% here>.
+%% Tutorial III: Model details: Events, parameter scope and rules. 
+% This tutorial is a continuation of the first two tutorials. We use the same
+% negative autoregulation circuit, but now discuss more details about the
+% model structure. 
 % 
 % Vipul Singhal
 
-%% todos
-% 
-% 
-% # describe the IFFL circuit, along with 3OC12 and aTc addspecies. show a
-% few different variations of what happens when the concentrations of
-% things are changed. 
-% # add some meat to the reactions and species naming conventions. 
-% # show how to set the parameters in the config file
-% # show the constitutive expression promoter file, the repression promoter
-% and protein files, the activator and combinatorial promoter file, and
-% describe where to change things (including the CSV file) to get a new
-% part made. 
-% # show some variations: linear DNA, recBCD, gamS; clpX + lva tag
-% # show the intermediate species trajectories at different doses. this can
-% be done using the plotCustomSpecies2 function. 
-% # show the use of the globalize params, getparam, setparam methods. 
-% # 
-% 
-
-%% Initializing the toolbox
-% Remember to set the working directory to the trunk directory of the
-% toolbox. 
-% 
-% Use this command to add the subdirectories needed to your matlab path. To
-% be run each time you begin a new TXTL toolbox session. 
+%% Create the model
 txtl_init;
-
-%% IFFL example
-% The code below can be used to set up the constitutive GFP production
-% example. 
-% 
-% Set up the standard TXTL tubes
-% These load up the RNAP, Ribosome and degradation enzyme concentrations
-% ``E2'' refers to a configuration file 
-tube1 = txtl_extract('E3');
-tube2 = txtl_buffer('E3');
-
-% Now set up a tube that will contain our DNA
-tube3 = txtl_newtube('lastetIFFL');
-
-
-% Define the DNA strands, and all the relevant reactions
-txtl_add_dna(tube3, ...
-  'plac(50)', 'utr1(20)', 'lasR(1000)', 5, 'plasmid');	
-txtl_add_dna(tube3, ...
-  'plas(50)', 'utr1(20)', 'tetR(1000)', 0.2, 'plasmid');	
-txtl_add_dna(tube3, ...
-  'plas_ptet(50)', 'utr1(20)', 'deGFP(1000)', 2, 'plasmid');	
-m = txtl_combine([tube1, tube2, tube3]);
-txtl_addspecies(m, 'OC12HSL', 1000);
-txtl_addspecies(m, 'aTc', 1000);
-
-% Mix the contents of the individual tubes
+tube1 = txtl_extract('E2');
+tube2 = txtl_buffer('E2');
+tube3 = txtl_newtube('negautoreg'); % name the circuit
+txtl_add_dna(tube3, 'ptet(50)', 'utr1(20)', 'tetR(1200)', 1, 'plasmid');
+txtl_add_dna(tube3, 'ptet(50)', 'utr1(20)', 'deGFP(1000)', 1, 'plasmid');
 Mobj = txtl_combine([tube1, tube2, tube3]);
+[simData] = txtl_runsim(Mobj,14*60*60); 
+t_ode = simData.Time; 
+x_ode = simData.Data; 
+txtl_plot(t_ode, x_ode, Mobj);
 
-% Run a simulaton
-% 
-
-tic
-[simData] = txtl_runsim(Mobj,14*60*60);
-toc
-t_ode = simData.Time;
-x_ode = simData.Data;
-
-%% plot the result
-% The following function plots the proteins, RNA and resources in the
-% toolbox. In the next section we delve deeper into the object oriented
-% structure of the model, and how to plot arbitrary species in the model. 
-txtl_plot(simData,Mobj);
-
-%% Model Structure
-% The model is organized as a model object, with sub objects specifying
-% Parameters, Reactions, Species, etc. Type in 
-Mobj
+%% Simbiology events used to model ATP and GTP degradation. 
+% The model has an event that sets the regeneration rate of AGTP (a species
+% used to account for one unit of ATP and one of GTP) to 0 after a fixed
+% period of time. The degradaton and regeneration reactions are: 
+degrx = sbioselect(Mobj.reactions, 'Reaction', 'AGTP -> AGMP'); 
+regrx = sbioselect(Mobj.reactions, 'Reaction', 'AGMP -> AGTP');
+%%
+% with parameters |AGTPdeg_rate| and |AGTPreg_varying| respectively. These
+% can be seen by typing in 
+%%
+%   get(degrx.KineticLaw)
+%   get(regrx.KineticLaw)
+%%
+% Note that these parameters are globally scoped, in that the local Parameters
+% field in the KineticLaw is empty (|degrx.KineticLaw.Parameters| returns empty,
+% and indeed the parameter is found at the model scope, which can be
+% verified by typing in |Mobj.Parameters|. You may verify this for
+% yourself. The globally scoped model parameters are
+Mobj.Parameters
 
 %%
-% We can see the number of instances of the various subclasses of the 
-% model object. We can explore further by typing 
-Mobj.Species
+% You might find it helpful to learn more about parameter scoping 
+% <https://www.mathworks.com/help/simbio/ref/addparameter.html here>. 
 
 %%
-% Proteins, RNA and DNA generally follow the convention
-% protein CDS, RNA 5'UTR--CDS, DNA promoter--5' UTR--CDS, with
-% variations possible. There are also simply named `core' species like
-% RNAP, Ribo, RNase, etc. Finally we denote bound complexes with a colon,
-% for example, Species 1:Species 2. 
-%% 
-% We also see that each of them has certain
-% other associated properties. You can explore further by accessing
-% individual species using their index, and using the `get' and `set' commands
-% to get and set the properties of the species. For example, try typing 
-Mobj.Species(1)
-
-%% 
-% This gives you the first species in the model. You can find out what
-% properties as associated with this species by typing in 
-get(Mobj.Species(1))
+% And the kinetics of the degradation reaction are:
+get(degrx.KineticLaw)
 
 %%
-% and then using the set command to set its initial concentration to 50
-% units:
-set(Mobj.Species(1), 'InitialAmount', 50)
-
+% There are four parameters associated with these two reactions: 
+prm = Mobj.Parameters(end-3:end)
 %%
-% Learn more about the get and set commands by typing in 
+% From time
+% |t = 0 to AGTPdeg_time| seconds, the parameter 
+% |AGTPreg_varying = AGTPreg_ON|, but once 
+% |time > AGTPdeg_time| seconds, a simbiology event sets the the parameter
+% |AGTPreg_varying = 0|. 
+% The degradation rate parameter |AGTPdeg_rate| is always at a constant
+% value. 
 %%
-%   help get
-%   help set
+% This timing based behavior is implemented using Simbiology events, and
+% can be verified by typing in 
+Mobj.Events
 
 
-%% 
-% You may read more about how model objects are arranged in Simbiology by
-% working through the
-% <https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html
-% Tutorial>. Feel free to browse the reactions and other subproperties by
-% individually typing in commands like 
+%% Locally scoped parameters. 
+% Most other parameters in the model are locally scoped. I.e., to view the
+% parameters associated with most reactions, you must access it through the
+% reaction's KineticLaw object, as shown below. 
 %%
-% 
-%   Mobj.reactions
-%   get(Mobj.Reactions)
-%   get(Mobj.Reactions(1))
-%   Mobj.Reactions(1).ReactionRate
-%   Mobj.Reactions(1).KineticLaw
-%   get(Mobj.Reactions(1).KineticLaw)
+Mobj.Reactions(1)
+%%
+get(Mobj.Reactions(1).KineticLaw)
+%%
+Mobj.Reactions(1).KineticLaw.Parameters
 %%
 % and so on.
-%% Plotting individual species
-% You can also plot the trajectories of any of the species in the model.
-% Use the function findspecies to get the index of the species object of interest. For
-% example, if you want to plot the trajectory of the dimerized tetR
-% protein, you could type in
+%% Simbiology Rules
+% Finally, Simbiology allows us to define rules that bind different
+% components of the model together. In our model, rules are used to tie
+% together the elongation rate parameter to the transcription rate, and to
+% the resource consumption rate: 
+%%
+%   Mobj.Rules
+%%
+% gives
+%%
+% 
+%    SimBiology Rule Array
+% 
+%    Index:    RuleType:            Rule:
+%    1         initialAssignment    TX_transcription_utr1_tetR = TX_elong_glob/1220
+%    2         initialAssignment    TX_NTPcons_utr1_tetR = TX_elong_glob/1220*(305-1)
+%    3         initialAssignment    TL_translation_tetR = TL_elong_glob/400
+%    4         initialAssignment    TL_REScons_tetR = TL_elong_glob/400*(400-1)
+%    5         initialAssignment    TX_transcription_utr1_deGFP = TX_elong_glob/1020
+%    6         initialAssignment    TX_NTPcons_utr1_deGFP = TX_elong_glob/1020*(255-1)
+%    7         initialAssignment    TL_translation_deGFP = TL_elong_glob/333
+%    8         initialAssignment    TL_REScons_deGFP = TL_elong_glob/333*(333-1)
 
-tetRindex = findspecies(Mobj, 'protein deGFP');
-figure
-plot(simData.Time/3600, simData.data(:,tetRindex));
-title('Un-matured protein concentration')
-ylabel('concentration, nM')
-xlabel('time, h')
-curraxis = axis; 
-axis([curraxis(1:2) 0 curraxis(4)])
-
+%%
+% Looking at the first rule, for example, we see that the transcription rate of the
+% tetR mRNA is the global elongation rate |TX_elong_glob| divided by the
+% length of the RNA to be transcribed. 

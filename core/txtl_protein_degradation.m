@@ -75,7 +75,7 @@ elseif strcmp(mode.add_dna_driver, 'Setup Reactions')
     % Protein monomer binds with protein ClpX*P protease
     reactionRate = varargin{1};
     
-    p1 = regexp(listOfSpecies,'^protein ClpX(-lva)*?$', 'match'); % test whether the star causes problems
+    p1 = regexp(listOfSpecies,'^protein ClpX(-lva)?*$', 'match'); % test whether the star causes problems
     listOfProtein = vertcat(p1{:});
     
     for k = 1:size(listOfProtein,1)
@@ -86,11 +86,11 @@ elseif strcmp(mode.add_dna_driver, 'Setup Reactions')
     set(Kobj, 'ParameterVariableNames', {'TXTL_PROT_DEGRAD_F', 'TXTL_PROT_DEGRAD_F'});
     
 
-    txtl_addreaction(tube,['[' listOfProtein{k} ':' protein.Name '] + AGTP -> [' protein.Name '**]  +  ' listOfProtein{k} ],...
+    txtl_addreaction(tube,['[' listOfProtein{k} ':' protein.Name '] + AGTP -> [' protein.Name '**]  +  ' listOfProtein{k} ' + AGMP'],...
         'MassAction',{'TXTL_prot_unfold',paramObj.prot_deg_unfold});
   
     txtl_addreaction(tube,[listOfProtein{k} ' -> null'],...
-        'MassAction',{'TXTL_clpx_deg',paramObj.ClpX_deg}); %1.7022e-08 older->0.001
+        'MassAction',{'TXTL_clpx_deg',paramObj.ClpX_deg*100}); %1.7022e-08 older->0.001
     end
     
     %%%%%%%%%%%%%%%%%%% DRIVER MODE: error handling %%%%%%%%%%%%%%%%%%%%%%%%%%%
