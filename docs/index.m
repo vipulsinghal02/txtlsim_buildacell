@@ -7,15 +7,9 @@
 % Tutorial I> shows the most basic usage of the toolbox to set up a negative 
 % autoregulation circuit. 
 % # <https://vipulsinghal02.github.io/txtlsim_buildacell/tutorial_ii.html
-% Tutorial II> shows slightly more advanced features of the toolbox. 
+% Tutorial II> continues with the negative autoregulation circuit, but shows more advanced features. 
 % # <https://vipulsinghal02.github.io/txtlsim_buildacell/tutorial_iii.html
-% Tutorial III> shows how to set up the incoherent feedforward loop, 
-% how to set model parameters, and customize the part files. 
-% 
-% The first of these can be opened by typing ``edit tutorial.m'' into the command 
-% line. You can also use the MATLAB publisher to publish this file. 
+% Tutorial III> also describes the events, rules and parameters in the model. 
 % 
 % Vipul Singhal, 18 Mar 2020
 %
-% In this tutorial, we explore and demonstrate some of the finer points of
-% the txtlsim toolbox. 
