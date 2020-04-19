@@ -25,7 +25,7 @@ Start with typing in `geneexpr` into the command window. This should run a const
 
 Next, run the `negautoreg` example in the command line. Again, you should see a plot of the species in the system, and no errors. This example simulates the negative autoregulation circuit. 
 
-We have created a series of tutorials that can be used to gain increasing levels of familiarity with the toolbox. These can be found [here](https://vipulsinghal02.github.io/txtlsim_buildacell/). We recommend running through the examples in these tutorials, and exploring the associated reactions, species, and models. Familiarity with the MATLAB Simbiology command line is helpful here. To learn more about Simbiology, go to the [Getting Started Using the Simbiology Command Line](https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html) page. 
+We have created a [series of tutorials](https://vipulsinghal02.github.io/txtlsim_buildacell/) that can be used to gain increasing levels of familiarity with the toolbox. We recommend running through the examples in these tutorials, and exploring the associated reactions, species, and models. Familiarity with the MATLAB Simbiology command line is helpful here. To learn more about Simbiology, go to the [Getting Started Using the Simbiology Command Line](https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html) page. 
 
 You can also use the MATLAB publisher button to publish this file, and look at it in the MATLAB help file markup. 
 
