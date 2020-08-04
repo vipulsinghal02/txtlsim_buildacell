@@ -4,6 +4,66 @@ function di = ZachIFFL_testdata(varargin)
 % Caltech Dec 2014 (edits: 2019)
 
 %% Import data and convert to groupedData object for fitting
+if ispc
+    
+    datamode = 'means';
+    if nargin == 1
+        datamode = varargin{1};
+        if ~strcmp(datamode, 'means') && ~strcmp(datamode, 'all_trajectories')
+            error('Not a valid data mode.')
+        end
+    end
+    txtlDir = '\Users\vipulsinghal\Dropbox\Documents\toolbox\txtlsim_vsfork2017';
+    if ~exist(txtlDir, 'dir')
+        txtlDir = pwd;
+    end
+    
+    
+    
+    
+    cd(txtlDir)
+    addpath(txtlDir);
+    txtl_init
+    mcmc_init
+    
+    datadir = [txtlDir '\mcmc_simbio\exp_data\Zach_IFFL_raw\S6'];
+    load([datadir '\Set6Data.mat'],'Set6Data')
+    load([datadir '\Set7Data.mat'],'Set7Data')
+    load([datadir '\Set8Data.mat'],'Set8Data')
+    load([datadir '\Set9Data.mat'],'Set9Data')
+    load([datadir '\Set10Data.mat'],'Set10Data')
+    
+    
+else
+    
+    datamode = 'means';
+    if nargin == 1
+        datamode = varargin{1};
+        if ~strcmp(datamode, 'means') && ~strcmp(datamode, 'all_trajectories')
+            error('Not a valid data mode.')
+        end
+    end
+    txtlDir = '/Users/vipulsinghal/Dropbox/Documents/toolbox/txtlsim_vsfork2017';
+    if ~exist(txtlDir, 'dir')
+        txtlDir = pwd;
+    end
+    
+    
+    
+    
+    cd(txtlDir)
+    addpath(txtlDir);
+    txtl_init
+    mcmc_init
+    
+    datadir = [txtlDir '/mcmc_simbio/exp_data/Zach_IFFL_raw/S6'];
+    load([datadir '/Set6Data.mat'],'Set6Data')
+    load([datadir '/Set7Data.mat'],'Set7Data')
+    load([datadir '/Set8Data.mat'],'Set8Data')
+    load([datadir '/Set9Data.mat'],'Set9Data')
+    load([datadir '/Set10Data.mat'],'Set10Data')
+    
+end
 
 datamode = 'means';
 if nargin == 1
@@ -12,15 +72,20 @@ if nargin == 1
         error('Not a valid data mode.')
     end
 end
-
 txtlDir = '/Users/vipulsinghal/Dropbox/Documents/toolbox/txtlsim_vsfork2017';
+if ~exist(txtlDir)
+    txtlDir = pwd;
+end
+
+
+
 
 cd(txtlDir)
 addpath(txtlDir);
 txtl_init
 mcmc_init
 
-datadir = '/Users/vipulsinghal/Dropbox/Documents/toolbox/txtlsim_vsfork2017/mcmc_simbio/exp_data/Zach_IFFL_raw/S6';
+datadir = 'mcmc_simbio/exp_data/Zach_IFFL_raw/S6';
 load([datadir '/Set6Data.mat'],'Set6Data')
 load([datadir '/Set7Data.mat'],'Set7Data')
 load([datadir '/Set8Data.mat'],'Set8Data')
@@ -226,16 +291,16 @@ elseif strcmp(datamode, 'all_trajectories')
     % somehow the set 8 data only has two columns. the third column is all
     % 0s . Dont remember why, but it is what it is.
     
-%     Sets 6 and 7 have 3 replicates. 
-% set 8 dose 1 has 2 replicates
-% set 9 and 10 have 3 replicates. 
-% Actually it is just easier to create a replicate. I know its not exactly
-% right (it modifies the standard deviation), but it works with the data
-% structures, adn does not affect the results in any substantial way. 
-
+    %     Sets 6 and 7 have 3 replicates.
+    % set 8 dose 1 has 2 replicates
+    % set 9 and 10 have 3 replicates.
+    % Actually it is just easier to create a replicate. I know its not exactly
+    % right (it modifies the standard deviation), but it works with the data
+    % structures, adn does not affect the results in any substantial way.
     
     
-     
+    
+    
     GFP  = 1000*[Set6Data(:,2:4,1);
         Set6Data(:,2:4,2);
         Set6Data(:,2:4,3);
@@ -283,7 +348,7 @@ elseif strcmp(datamode, 'all_trajectories')
         repmat(Set9Data(:,1,1),7,1)
         repmat(Set10Data(:,1,1),7,1);];
     
-
+    
     
     GFP = max(GFP,1e-10);
     % tetR DNA

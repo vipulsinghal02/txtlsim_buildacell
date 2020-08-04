@@ -76,15 +76,11 @@ end
 
 M=size(m,2);
 Np=size(m,1);
-
-if isnan(p.scatter) || ~p.scatter
-    if p.ess>Np
-        error('Effective Sample Size (ess) must be smaller than number of samples')
-    end
+if p.ess>Np
+    error('Effective Sample Size (ess) must be smaller than number of samples')
 end
-
 if M>25
-    warning('Too many dimensions. You probably don''t want to make that many subplots. Split the parameter set into smaller subsets?')
+    error('Too many dimensions. You probably don''t want to make that many subplots. ')
 end
 if isnan(p.scatter)
     p.scatter=Np<2000;
@@ -107,10 +103,10 @@ if p.grid
 else
     p.grid='off';
 end
-ss = get(0, 'screensize');
+set(0,'Units','normalized')
 figure
-set(gcf, 'Position', [ss(3)*(1-1/1.05) ss(4)*(1-1/1.15) ss(3)/1.05 ss(4)/1.15]);
-
+set(gcf,'Units', 'normalized')
+set(gcf, 'Position', [0.05, 0.1, 0.9, 0.8])
 % clf
 % ff = gcf;
 % set(ff, 'Position', [100 100 900 600])
@@ -137,13 +133,12 @@ for r=1:M
                     F=[0,F(ceil(0.5:0.5:end)),0];
                 end
                 
-                
             end
             fill(X,F,p.color,'edgecolor','none')
             set(gca,'ytick',[],'YLim',[0 max(F)*1.1])
             set(gca,'XGrid',p.grid)
             ax = gca;
-            ax.FontSize = p.fontsize-4;
+            ax.FontSize = p.fontsize-2;
         
         else
             if p.scatter
@@ -173,7 +168,7 @@ for r=1:M
             end
             set(gca,'XGrid',p.grid,'YGrid',p.grid)
             ax = gca;
-            ax.FontSize = p.fontsize-4;
+            ax.FontSize = p.fontsize-2;
             if diff(p.support(1:2,r))>0, set(gca,'Ylim',p.support(1:2,r)); end
             %!VSE: changed p.range to p.support
         end

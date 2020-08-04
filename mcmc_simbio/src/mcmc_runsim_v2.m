@@ -301,8 +301,8 @@ for i = 1:ri.nIter %
     disp(['Iteration number ' num2str(i) '.']);
     if p.pausemode
         if ~mod(i, 2)
-            fprintf('Pausing for 2 minutes before starting run number %d. \n', i);
-            pause(120)
+            fprintf('Pausing for 5 minutes to cool the CPU before starting run number %d. \n', i);
+            pause(300)
         end
     end
     if  isempty(p.stepLadder) && (i == 5 || ~mod(i, 5))
@@ -312,6 +312,25 @@ for i = 1:ri.nIter %
     else
         ssize = ri.stepSize;
     end
+    
+    
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%% refresh parallel pool to free memory on windows... (sigh)###
+    currpool = gcp('nocreate');
+    if (~mod(i, 5))
+        if ~isempty(currpool)
+            nWorker = currpool.NumWorkers;
+            delete(gcp('nocreate'))
+            parpool(nWorker)
+        end
+    end
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    
+    
+    
     tic
     fprintf('starting mcmc %d\n', i);
     fprintf('current step size: %d\n', ssize*stepMultipliers(i));

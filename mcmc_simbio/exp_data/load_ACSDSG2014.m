@@ -10,10 +10,20 @@ function [t, y, meta] = load_ACSDSG2014(mode)
 % the rawdata file should be in the same directory as this file
 % DATA description: 
 % !TODO fill this
-fp = mfilename('fullpath');
-slashes = regexp(fp, '/');
-filedir = fp(1:slashes(end)-1);
-run([filedir '/rawdata_ACSDSG2014.m'])
+
+if ispc
+    fp = mfilename('fullpath');
+    slashes = regexp(fp, '\');
+    filedir = fp(1:slashes(end)-1);
+    run([filedir '\rawdata_ACSDSG2014.m'])
+else
+    fp = mfilename('fullpath');
+    slashes = regexp(fp, '/');
+    filedir = fp(1:slashes(end)-1);
+    run([filedir '/rawdata_ACSDSG2014.m'])
+    
+end
+
 switch mode
     case 'RNAdeg'
         initialConc = [37.5, 75, 150, 200, 600, 700, 800, 900, 1000];

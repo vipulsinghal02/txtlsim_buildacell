@@ -214,7 +214,8 @@ p.parse(varargin{:})
 p = p.Results;
 
 % get the screen size for plotting. 
-scrsz = get(0,'screensize');
+set(0,'Units','normalized')
+
 
 if p.separateExpSim && (strcmp(p.ExpMode,'none') || strcmp(p.SimMode, 'none'))
     error(['Cant have unspecified Experimental data or Simulation Data '...
@@ -246,7 +247,9 @@ if p.just_data_info
         tv = converttosec(tv, timeUnits);
         colorz = parula(nICs+2);
         for msnum = 1:nMS
-            fighandle{dID}(msnum) = figure( 'position',[50 50 scrsz(3)/1.7 scrsz(4)/1.4]);
+            fighandle{dID}(msnum) = figure;
+            set(gcf,'Units', 'normalized')
+            set(gcf, 'Position', [0.05, 0.1, 0.5, 0.8])
             ax = gca;
             legendentry = cell(ndNames, 1);
             for i=1:nICs
@@ -367,7 +370,9 @@ else
     
     
     for msnum = 1:nMS
-        fighandle(msnum) = figure( 'position',[50 50 scrsz(3)/1.7 scrsz(4)/1.4]);;
+        fighandle(msnum) = figure;
+        set(gcf,'Units', 'normalized')
+        set(gcf, 'Position', [0.05, 0.1, 0.5, 0.8])
         ax = gca;
         if p.collateDoses
             if p.separateExpSim
@@ -475,8 +480,8 @@ else
                     colIX = i-floor((i-1)/ncols)*ncols;
                    
                     if p.separateExpSim
-                        warning('Both subplot arrangement and separate experiment and sim are specified.\n ' ...
-                            'Not going to do anything')
+                        warning(['Both subplot arrangement and separate experiment and sim are specified.\n ' ...
+                            'Not going to do anything'])
                         % future version : just make two figures. 
                         
                         % SEPARATEEXPSIM 1 , COLLATEDOSES 0,

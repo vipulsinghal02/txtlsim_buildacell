@@ -51,11 +51,11 @@ p.addParameter('scatter', true, @islogical);
 % p.addParameter('range', [99.5]);
 p.addParameter('names', []);
 p.addParameter('support', []); % if isempty, do nothing.
-p.addParameter('ess', 100, @isnumeric);
+p.addParameter('ess', 200, @isnumeric);
 p.addParameter('fullmatrix', false, @islogical);
 p.addParameter('color', [.6 .35 .3]);
 p.addParameter('grid', false, @islogical);
-p.addParameter('fontsize', 18, @isnumeric);
+p.addParameter('fontsize', 10, @isnumeric);
 p.addParameter('nbins', [], @isnumeric);
 p.addParameter('transparency', 0.05, @isnumeric);
 p.addParameter('savematlabfig', false, @islogical);
@@ -63,6 +63,7 @@ p.addParameter('savejpeg', false, @islogical);
 p.addParameter('projdir', [], @ischar);
 p.addParameter('tstamp', [], @ischar);
 p.addParameter('plotChains', true, @islogical);
+p.addParameter('plotDistribution', true, @islogical);
 
 p.addParameter('extrafignamestring', [], @ischar);
 p.parse(varargin{:})
@@ -78,39 +79,45 @@ else
 end
 
 % Plot the corner plot
-
-ecornerplot_vse(marray,'scatter', p.scatter,...
-    'ks', p.ks,...
-    'names', legendz,...
-    'grid', p.grid,...
-    'color', p.color,...
-    'fullmatrix', p.fullmatrix,...
-    'ks', p.ks,...
-    'support', p.support, ...
-    'transparency', p.transparency,...
-    'fontsize', p.fontsize, ...
-    'ess', p.ess);
-if p.savematlabfig
-    if isempty(p.projdir) || isempty(p.tstamp)
-        warning('timestamp and project directory not specified. Nothing will be saved.')
-    else
-        
-        specificproj = [p.projdir '/simdata_' p.tstamp];
-        saveas(gcf, [specificproj '/cornerplot' p.tstamp p.extrafignamestring]);
-        
+if p.plotDistribution
+    
+    ecornerplot_vse(marray,'scatter', p.scatter,...
+        'ks', p.ks,...
+        'names', legendz,...
+        'grid', p.grid,...
+        'color', p.color,...
+        'fullmatrix', p.fullmatrix,...
+        'ks', p.ks,...
+        'support', p.support, ...
+        'transparency', p.transparency,...
+        'fontsize', p.fontsize, ...
+        'ess', p.ess);
+    if p.savematlabfig
+        if isempty(p.projdir) || isempty(p.tstamp)
+            warning('timestamp and project directory not specified. Nothing will be saved.')
+        else
+            
+            specificproj = [p.projdir '/simdata_' p.tstamp];
+            saveas(gcf, [specificproj '/cornerplot' p.tstamp p.extrafignamestring]);
+            
+        end
     end
-end
-
-if p.savejpeg
-    if isempty(p.projdir) || isempty(p.tstamp)
-        warning('timestamp and project directory not specified. Nothing will be saved.')
-    else
-        specificproj = [p.projdir '/simdata_' p.tstamp];
-        print(gcf, '-djpeg', '-r200', [specificproj '/cornerplot' p.tstamp p.extrafignamestring])
+    
+    if p.savejpeg
+        if isempty(p.projdir) || isempty(p.tstamp)
+            warning('timestamp and project directory not specified. Nothing will be saved.')
+        else
+            specificproj = [p.projdir '/simdata_' p.tstamp];
+%             print(gcf, '-djpeg', '-r600', [specificproj '/cornerjpg' p.tstamp p.extrafignamestring])
+%             print(gcf, '-dpng', '-r600', [specificproj '/cornerpng' p.tstamp p.extrafignamestring])
+            print(gcf, '-djpeg', '-r200', [specificproj '/cornerjpg_lowres_' p.tstamp p.extrafignamestring])
+            print(gcf, '-dpng', '-r200', [specificproj '/cornerpng_lowres_' p.tstamp p.extrafignamestring])         
+            print(gcf, '-djpeg', '-r150', [specificproj '/cornerjpg_vlowres_' p.tstamp p.extrafignamestring])
+            print(gcf, '-dpng', '-r150', [specificproj '/cornerpng_vlowres_' p.tstamp p.extrafignamestring])   
+        end
     end
+    
 end
-
-
 
 % Plot the Ensemble Average Autocorrelation Function
 %     figure
@@ -156,7 +163,10 @@ if ndims(marray)==3
                 warning('timestamp and project directory not specified. Nothing will be saved.')
             else
                 specificproj = [p.projdir '/simdata_' p.tstamp];
-                print(gcf, '-djpeg', '-r200', [specificproj '/trace' p.tstamp p.extrafignamestring])
+%                 print(gcf, '-djpeg', '-r600', [specificproj '/tracejpg' p.tstamp p.extrafignamestring])
+%                 print(gcf, '-dpng', '-r600', [specificproj '/tracepng' p.tstamp p.extrafignamestring])
+                print(gcf, '-djpeg', '-r200', [specificproj '/tracejpg_lowres_' p.tstamp p.extrafignamestring])
+                print(gcf, '-dpng', '-r200', [specificproj '/tracepng_lowres_' p.tstamp p.extrafignamestring])                
             end
         end
         
