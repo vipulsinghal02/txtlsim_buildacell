@@ -45,6 +45,14 @@ Next, open and explore the mcmc_simbio estimation examples given in the files `p
 
 More information can be found in the following references: 
 
+Main paper: 
+
+Vipul Singhal, Zoltan A. Tuza, Zachary Sun, Richard M Murray, 
+A MATLAB Toolbox for Modeling Genetic Circuits in Cell-Free Systems
+bioRxiv 2020.08.05.237990; doi: https://doi.org/10.1101/2020.08.05.237990
+
+Related: 
+
 V. Singhal, Z. A. Tuza, Z. Z. Sun and R. M. Murray, (2020). A MATLAB Toolbox for Modeling the Behavior of Genetic Circuits in Cell-Free Transcription-Translation Systems. In preparation. 
 
 Z. A. Tuza, V. Singhal, J. Kim and R. M. Murray, "An in silico modeling toolbox for rapid prototyping of circuits in a biomolecular “breadboard” system," 52nd IEEE Conference on Decision and Control, Firenze, 2013, pp. 1404-1410.
