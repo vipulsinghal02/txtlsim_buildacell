@@ -16,7 +16,7 @@ git clone https://github.com/vipulsinghal02/txtlsim_buildacell.git
 
 into a directory you wish to put the toolbox in. Alternatively, if you do not plan to version control the toolbox, you can simply download it as a zip file using the green button on the [main page](https://github.com/vipulsinghal02/txtlsim_buildacell). 
 
-Lets call the directory where you cloned or downloaded the repository `trunk`, i.e., this is where directories like `core`, `components`, `examples` and `mcmc_simbio` are. Open MATLAB, and set the current working directory to `trunk`. Type in `txtl_init` into the MATLAB command line. This initializes the txtlsim toolbox. 
+Lets call the directory where you cloned or downloaded the repository `trunk`, i.e., this is where directories like `core`, `components`, `examples` and `mcmc_simbio` are. Open MATLAB, and set the current working directory to `trunk`. Type in `txtl_init` into the MATLAB command line, followed by `mcmc_init`. This initializes the txtlsim toolbox. 
 
 Check if the toolbox is installed properly by running the follwoing examples:
 
@@ -32,13 +32,19 @@ We have created a series of tutorials that can be used to gain increasing levels
 
 We recommend running through the examples in these tutorials, and exploring the associated reactions, species, and models. Familiarity with the MATLAB Simbiology command line is helpful here. To learn more about Simbiology, go to the [Getting Started Using the Simbiology Command Line](https://www.mathworks.com/help/simbio/gs/simbiology-command-line-tutorial.html) page. 
 
-You can also use the MATLAB publisher button to publish this file, and look at it in the MATLAB help file markup. 
+You can generate the figures in the [paper](https://doi.org/10.1101/2020.08.05.237990) using the scripts in the `generate_paper_figs` directory. 
 
-You can also type `edit TXTL_workshop_scripts` into the command line and run the code in this file. It contains the constitutive expression, negative autoregulation, induction and IFFL circuit examples. 
+
+### Coming soon...
+
+* A full set of worked examples, including the repressilator, toggle switch. 
+* Worked examples of how to use the toolbox for Bayesian Parameter inference and part characterization. 
+* A tutorial on how to add your own component files. 
 
 <!-- 
+You can also use the MATLAB publisher button to publish this file, and look at it in the MATLAB help file markup. 
+You can also type `edit TXTL_workshop_scripts` into the command line and run the code in this file. It contains the constitutive expression, negative autoregulation, induction and IFFL circuit examples. 
 ### mcmc_simbio examples
-
 Next, open and explore the mcmc_simbio estimation examples given in the files `proj_mcmc_tutorial`, `proj_mcmc_tutorial_II`, and `proj_mcmc_tutorial_III` in the `trunk\mcmc_simbio\proj\` directory. We strongly recommend you skim through the `mcmc_info.m` and `data_info` files (`trunk\mcmc_simbio\models_and_supporting_files\` or type `help mcmc_info` and `help data_info` into the MATLAB command line) to gain an understanding of some of the key functionalities of the parameter inference toolbox. Along with the three tutorial files, the `mcmc_info.m` and the `data_info.m` files provide an initial idea of the capabilities of the toolbox.  -->
 
 ## References
