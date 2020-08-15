@@ -14,7 +14,7 @@ Clone the repository using
 git clone https://github.com/vipulsinghal02/txtlsim_buildacell.git
 ```
 
-into a directory you wish to put the toolbox in. Alternatively, if you do not plan to version control the toolbox, you can simply download it as a zip file using the green button on the [main page](https://github.com/vipulsinghal02/txtlsim_buildacell). 
+into a directory you wish to put the toolbox in. Alternatively, if you do not plan to version control the toolbox, you can simply download it as a zip file from the [main page](https://github.com/vipulsinghal02/txtlsim_buildacell). 
 
 Lets call the directory where you cloned or downloaded the repository `trunk`, i.e., this is where directories like `core`, `components`, `examples` and `mcmc_simbio` are. Open MATLAB, and set the current working directory to `trunk`. Type in `txtl_init` into the MATLAB command line, followed by `mcmc_init`. This initializes the txtlsim toolbox. 
 
@@ -37,9 +37,9 @@ You can generate the figures in the [paper](https://doi.org/10.1101/2020.08.05.2
 
 ### Coming soon...
 
-* A full set of worked examples, including the repressilator, toggle switch. 
-* Worked examples of how to use the toolbox for Bayesian Parameter inference and part characterization. 
-* A tutorial on how to add your own component files. 
+* A full set of worked examples, including the repressilator, toggle switch, IFFL, linear vs plasmid DNA mechanics, and ClpX mediated protein degradation mechanics. 
+* Worked examples of how to use the toolbox for Bayesian parameter inference and part characterization. 
+* A tutorial on how to add your own component files to extend the toolbox. 
 
 <!-- 
 You can also use the MATLAB publisher button to publish this file, and look at it in the MATLAB help file markup. 
