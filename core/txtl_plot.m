@@ -38,11 +38,8 @@ function processedData = txtl_plot(varargin)
 
 % get default data structrure for plot
 defaultdataGroups = txtl_getDefaultPlotDataStruct();
-
 operationMode = 'standalone';
-
 switch nargin
-    
     case 2
         simData = varargin{1};
         modelObj = varargin{2};
@@ -320,7 +317,7 @@ for k = 1:numOfGroups
         
         title(currentHandler,'Resource usage');
         lgh = legend(currentHandler,...
-            {'AGTP [nM]', 'CUTP [nM]', 'AA [mM]', 'RNAP [nM]', 'Ribo [nM]'}, ...
+            {'AGTP', 'CUTP', 'AA', 'RNAP', 'Ribo'}, ...
             'Location', 'Best');
         if verLessThan('matlab', '8.4')
             legend(lgh,'boxoff');
