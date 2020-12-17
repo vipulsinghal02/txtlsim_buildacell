@@ -48,7 +48,7 @@ octave-workspace
 
 # movie files
 *.mp4
-!PENDING_*
+!PENDING_.*
 
 # Compiled source #
 ###################
