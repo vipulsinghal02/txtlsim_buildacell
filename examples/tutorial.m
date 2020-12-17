@@ -14,10 +14,8 @@
 %% Initializing the toolbox
 % Set the working directory to the trunk directory of the
 % toolbox. The trunk directory is where folders like "core", "config", "examples" and
-% "components" live. Here is a snapshot of this directory on our computer. 
-% 
-% <<trunk_dir.png>>
-% 
+% "components" live. 
+%
 % Use this command to add the sub-directories needed to your matlab path. To
 % be run each time you begin a new MATLAB session where you plan to run
 % txtlsim. 
